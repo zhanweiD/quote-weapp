@@ -2,34 +2,33 @@
 	<view class="page">
 		<view class="status-bar"></view>
 		<view class="top">
-			<!-- #ifdef MP -->
 			<!-- 页面标题 -->
-			<view class="page-title" :style="'height: ' + navBarHeight"><image src="../../static/images/logo.png"></image></view>
 			<!-- 搜索 -->
-			<view class="search" :style="showNavFloat ? 'display:none' : ''">
-				<navigator class="input" :url="'search?category_id=' + category_id" hover-class="none">
+			<view class="search page-title">
+				<u-search :show-action="false" @search="searchContent()" placeholder="iphone 12" height="70"></u-search>
+<!-- 				<navigator class="input">
 					<iconfont type="search"></iconfont>
-					<text>大道至简，悟在天成</text>
-				</navigator>
+					<text>iphone 12</text>
+				</navigator> -->
 			</view>
-			<!-- #endif -->
-
-			<!-- 搜索 -->
-			<!-- #ifdef H5 -->
-			<view class="search">
-				<image class="logo" mode="aspectFit" src="../../static/images/logo.png"></image>
-				<navigator class="input" url="search" hover-class="none">
-					<iconfont type="search"></iconfont>
-					<text>大道至简，悟在天成</text>
-				</navigator>
-				<navigator class="user" url="/pages/user/index" hover-class="none">
-					<iconfont type="user-01"></iconfont>
-					<!-- <image v-if="current.user" :src="user.avatar_url"></image> -->
-					<!-- <image src="/static/images/default_user_photo.jpg" @tap="login()"></image> -->
-				</navigator>
-			</view>
-			<!-- #endif -->
-
+			<!-- <u-alert-tips 
+				:show-icon="true" 
+				:show="true" 
+				type="primary" 
+				@close="show = false" 
+				title="点击右上方添加到我的小程序,微信首页下拉即可快速访问" 
+				:close-able="true"
+			> -->
+			<u-notice-bar 
+				:show="barShow"
+				type="primary" 
+				mode="horizontal" 
+				:close-icon="true"
+				:speed="100"
+				@close="barShow = false"
+				:list="['点击右上方添加到我的小程序,微信首页下拉即可快速访问']"
+			></u-notice-bar>
+			</u-alert-tips>
 			<!-- 导航 -->
 			<view class="navbar" :class="showNavFloat ? 'floatbar' : ''">
 				<view class="menu" v-if="category.length > 0">
@@ -85,7 +84,7 @@
 				<articleList :list="list" />
 			</scroller>
 		</view>
-		<pageLoading v-if="showPageLoading"></pageLoading>
+		<!-- <pageLoading v-if="showPageLoading"></pageLoading> -->
 	</view>
 </template>
 
@@ -117,7 +116,8 @@ export default {
 			showNoData: false,
 			showPageLoading: true,
 			showNavFloat: false,
-			navBarHeight: ''
+			navBarHeight: '',
+			barShow: true
 		};
 	},
 	onShow() {
@@ -160,6 +160,9 @@ export default {
 		this.loadData();
 	},
 	methods: {
+		searchContent(v) {
+			console.log(v)
+		},
 		/*初始化滚动*/
 		initScroller(scroller) {
 			this.scroller = scroller;
@@ -312,7 +315,7 @@ page {
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		height: 90rpx;
+		height: 124rpx;
 		text-align: center;
 		border-bottom: 1rpx solid #efefef;
 		z-index: 9999;
@@ -326,10 +329,12 @@ page {
 
 	/*搜索*/
 	.search {
-		padding: 24rpx 24rpx 0 24rpx;
+		padding: 32rpx 200rpx 0 24rpx;
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
+		height: 124rpx;
+		z-index: 9999;
 		.logo {
 			height: 60rpx;
 			width: 474rpx;
@@ -342,7 +347,7 @@ page {
 			height: 70rpx;
 			width: 100%;
 			background: #f5f5f5;
-			border-radius: 34rpx 34rpx 0 34rpx;
+			border-radius: 34rpx;
 			/deep/ .icon {
 				margin-left: 28rpx;
 				color: #aaaaaa;

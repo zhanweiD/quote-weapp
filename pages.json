@@ -1,5 +1,28 @@
 {
+	"easycom": {
+	        // 下载安装的方式需要前面的"@/"，npm安装的方式无需"@/"
+	        // 下载安装方式
+	        "^u-(.*)": "uview-ui/components/u-$1/u-$1.vue"
+	        // npm安装方式
+	        // "^u-(.*)": "uview-ui/components/u-$1/u-$1.vue"
+	},
 	"pages": [
+		{
+			"path": "pages/user/index",
+			"style": {
+				// #ifdef H5
+				//"titleNView": false,
+				"navigationBarBackgroundColor": "#FFFFFF",
+				"navigationBarTextStyle": "black",
+				"navigationBarTitleText": "用户中心",
+				// #endif
+				// #ifndef H5
+				"navigationStyle": "custom",
+				"navigationBarTitleText": "我的",
+				// #endif
+				"enablePullDownRefresh": true
+			}
+		},
 		{
 			"path": "pages/article/index",
 			"style": {
@@ -10,24 +33,9 @@
 				"app-plus": {
 					"bounce": "none" // 取消iOS回弹,避免和下拉刷新冲突 (小程序无法取消, 点此查看H5端的取消方法... )
 				},
-				"navigationBarTitleText": "开心品生活"
+				"navigationBarTitleText": "报价平台"
 			}
 		},
-		//#ifdef H5
-		{
-			"path": "pages/article/list",
-			"style": {
-				"titleNView": false,
-				"navigationStyle": "custom",
-				"enablePullDownRefresh": false, // 不开启下拉刷新, 默认就是false
-				"disableScroll": true, // 禁止滚动, 解决scroll-view在Android小程序卡顿的问题
-				"app-plus": {
-					"bounce": "none" // 取消iOS回弹,避免和下拉刷新冲突 (小程序无法取消, 点此查看H5端的取消方法... )
-				},
-				"navigationBarTitleText": "开心品生活"
-			}
-		},
-		//#endif
 		{
 			"path": "pages/article/search",
 			"style": {
@@ -57,22 +65,22 @@
 				"enablePullDownRefresh": true
 			}
 		},
-		{
-			"path": "pages/user/index",
-			"style": {
-				// #ifdef H5
-				//"titleNView": false,
-				"navigationBarBackgroundColor": "#FFFFFF",
-				"navigationBarTextStyle": "black",
-				"navigationBarTitleText": "用户中心",
-				// #endif
-				// #ifndef H5
-				"navigationStyle": "custom",
-				"navigationBarTitleText": "我的",
-				// #endif
-				"enablePullDownRefresh": true
-			}
-		},
+		// {
+		// 	"path": "pages/user/index",
+		// 	"style": {
+		// 		// #ifdef H5
+		// 		//"titleNView": false,
+		// 		"navigationBarBackgroundColor": "#FFFFFF",
+		// 		"navigationBarTextStyle": "black",
+		// 		"navigationBarTitleText": "用户中心",
+		// 		// #endif
+		// 		// #ifndef H5
+		// 		"navigationStyle": "custom",
+		// 		"navigationBarTitleText": "我的",
+		// 		// #endif
+		// 		"enablePullDownRefresh": true
+		// 	}
+		// },
 		{
 			"path": "pages/user/favorite",
 			"style": {
@@ -81,7 +89,7 @@
 				"app-plus": {
 					"bounce": "none" // 取消iOS回弹,避免和下拉刷新冲突 (小程序无法取消, 点此查看H5端的取消方法... )
 				},
-				"navigationBarTitleText": "我的收藏"
+				"navigationBarTitleText": "充值中心"
 			}
 		},
 		{
@@ -160,14 +168,14 @@
 		{
 			"path": "pages/common/about",
 			"style": {
-				"navigationBarTitleText": "关于开心品生活"
+				"navigationBarTitleText": "关于报价平台"
 			}
 		}
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
-		"navigationBarTitleText": "开心品生活",
-		"navigationBarBackgroundColor": "#8cc7b5",
+		"navigationBarTitleText": "报价平台",
+		"navigationBarBackgroundColor": "#3B7ED5",
 		"backgroundColor": "#F8F8F8"
 	},
 	"condition": { //模式配置，仅开发期间生效
@@ -183,10 +191,15 @@
 				"query": ""
 			},
 			{
-				"name": "详情",
-				"path": "pages/article/detail",
-				"query": "id=19"
+				"pagePath": "pages/user/index",
+				"name": "我的",
+				"query": ""
 			}
+			// {
+			// 	"name": "详情",
+			// 	"path": "pages/article/detail",
+			// 	"query": "id=19"
+			// }
 		]
 	},
 	"tabBar": {
@@ -194,26 +207,24 @@
 		"selectedColor": "#000000",
 		"backgroundColor": "#FFFFFF",
 		"list": [
-			// #ifndef H5
 			{
 				"pagePath": "pages/article/index",
-				"iconPath": "static/images/nav/icon_home.png",
-				"selectedIconPath": "static/images/nav/icon_home_hover.png",
-				"text": "首页"
+				"iconPath": "static/images/home_n.png",
+				"selectedIconPath": "static/images/home_h.png"
+				// "text": "首页"
 			},
-			// {
-			// 	"pagePath": "pages/user/favorites",
-			// 	"iconPath": "static/images/nav/icon_favorite.png",
-			// 	"selectedIconPath": "static/images/nav/icon_favorite_hover.png",
-			// 	"text": "收藏"
-			// },
+			{
+				"pagePath": "pages/user/favorites",
+				"iconPath": "static/images/server_n.png",
+				"selectedIconPath": "static/images/server_h.png"
+				// "text": "供应商"
+			},
 			{
 				"pagePath": "pages/user/index",
-				"iconPath": "static/images/nav/icon_user.png",
-				"selectedIconPath": "static/images/nav/icon_user_hover.png",
-				"text": "我的"
+				"iconPath": "static/images/me_n.png",
+				"selectedIconPath": "static/images/me_h.png"
+				// "text": "我的"
 			}
-			//#endif
 		]
 	}
 }

@@ -4,6 +4,7 @@ import store from './store'
 import api from './config/api'
 import base from './common/app'
 import h5Api from './common/sdk/H5Api'
+import uView from 'uview-ui'
 
 Vue.config.productionTip = false
 
@@ -11,13 +12,15 @@ Vue.prototype.$store = store
 Vue.prototype.$api = api
 Vue.prototype.$app = base
 
+Vue.use(uView)
+
 /*无状态提示信息*/
 Vue.prototype.$alert = function(msg = '', icon = 'none', url = '', openType = 'navigate') {
 	base.alert(msg, icon, url, openType);
 };
 
 /*弹出加载框*/
-Vue.prototype.$loading = function(msg = '', mask = true) {
+Vue.prototype.$loading = function(msg = '', mask = false) {
 	base.loading(msg, mask);
 };
 

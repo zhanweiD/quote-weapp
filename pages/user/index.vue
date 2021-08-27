@@ -22,13 +22,23 @@
 					</view>
 				</view>
 			</view>
+			<view class="middle-info">
+				<view class="info-money">
+					<view>0.00</view>
+					<view>余额（元）</view>
+				</view>
+				<view class="info-money">
+					<view>2020-12-12</view>
+					<view>会员到期时间</view>
+				</view>
+			</view>
 			<view class="nav">
 				<view class="list">
 					<navigator class="item" url="/pages/user/favorite">
 						<view class="info">
 							<view class="name">
-								<iconfont type="star-o"></iconfont>
-								<text>我的收藏</text>
+								<iconfont type="user-info"></iconfont>
+								<text>我的充值中心</text>
 							</view>
 							<iconfont type="go"></iconfont>
 						</view>
@@ -36,28 +46,28 @@
 					<navigator class="item" url="/pages/user/profile">
 						<view class="info">
 							<view class="name">
-								<iconfont type="user-info"></iconfont>
-								<text>我的资料</text>
+								<iconfont type="star-o"></iconfont>
+								<text>我的商品</text>
 							</view>
 							<iconfont type="go"></iconfont>
 						</view>
 					</navigator>
 				</view>
 				<view class="list">
-					<navigator class="item" url="/pages/common/about">
-						<view class="info">
-							<view class="name">
-								<iconfont type="about"></iconfont>
-								<text>关于开心品生活</text>
-							</view>
-							<iconfont type="go"></iconfont>
-						</view>
-					</navigator>
 					<navigator class="item" url="/pages/user/feedback">
 						<view class="info">
 							<view class="name">
 								<iconfont type="feedback"></iconfont>
 								<text>意见建议</text>
+							</view>
+							<iconfont type="go"></iconfont>
+						</view>
+					</navigator>
+					<navigator class="item" url="/pages/common/about">
+						<view class="info">
+							<view class="name">
+								<iconfont type="about"></iconfont>
+								<text>关于报价平台</text>
 							</view>
 							<iconfont type="go"></iconfont>
 						</view>
@@ -87,9 +97,6 @@ export default {
 	},
 	onShow() {
 		this.$initPageTitle(); //初始化页面标题
-		// #ifdef MP
-		this.loginText = '微信登录';
-		// #endif
 		this.getUserInfo(); //获取用户信息
 
 		//登录
@@ -194,7 +201,7 @@ export default {
 .user {
 	.base-info {
 		//background-image: linear-gradient(top, #e4edec 20%, #e4edec 80%);
-		background: #8cc7b5;
+		background: #3B7ED5;
 		height: 280rpx;
 	}
 	.user-info {
@@ -273,12 +280,22 @@ export default {
 		}
 	}
 }
+.middle-info {
+	display: flex;
+	background-color: #FFFFFF;
+	justify-content: space-around;
+	margin-bottom: 36rpx;
+	.info-money {
+		padding: 36rpx 0;
+		text-align: center;
+	}
+}
 .nav {
 	margin-top: -15rpx;
 	margin-bottom: calc(var(--window-bottom) + 20rpx);
 	.list {
-		margin-top: 15rpx;
-		margin-bottom: 20rpx;
+		margin-top: 0rpx;
+		// margin-bottom: 20rpx;
 		.item {
 			padding-left: 24rpx;
 			background: #ffffff;
@@ -303,7 +320,7 @@ export default {
 						margin-right: 16rpx;
 					}
 					/deep/ .icon {
-						color: #8cc7b5;
+						color: #3B7ED5;
 						font-size: 44rpx;
 						margin-right: 16rpx;
 						line-height: normal;
@@ -341,15 +358,10 @@ export default {
 					font-size: 24rpx;
 				}
 			}
-			&:last-child {
-				.info {
-					border-bottom: 0;
-				}
-			}
 		}
 	}
 }
 .status-bar {
-	background: #8cc7b5;
+	background: #3B7ED5;
 }
 </style>

@@ -18,4 +18,5 @@ export default {
 @import './common/uni.css';
 @import './common/iconfont.css';
 @import './common/app.scss';
+@import "uview-ui/index.scss";
 </style>

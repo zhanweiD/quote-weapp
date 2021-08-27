@@ -2,7 +2,7 @@
 	<view class="page">
 		<view class="content">
 			<view class="about">
-				大道至简，悟在天成！ 放眼看沧桑世事，开心品快乐生活！
+				报价平台
 			</view>
 		</view>
 	</view>

@@ -4,21 +4,9 @@
 		<view class="top">
 			<!-- 页面标题 -->
 			<!-- 搜索 -->
-			<view class="search page-title">
+			<view class="search">
 				<u-search :show-action="false" @search="searchContent()" placeholder="iphone 12" height="70"></u-search>
-<!-- 				<navigator class="input">
-					<iconfont type="search"></iconfont>
-					<text>iphone 12</text>
-				</navigator> -->
 			</view>
-			<!-- <u-alert-tips 
-				:show-icon="true" 
-				:show="true" 
-				type="primary" 
-				@close="show = false" 
-				title="点击右上方添加到我的小程序,微信首页下拉即可快速访问" 
-				:close-able="true"
-			> -->
 			<u-notice-bar 
 				:show="barShow"
 				type="primary" 
@@ -28,63 +16,67 @@
 				@close="barShow = false"
 				:list="['点击右上方添加到我的小程序,微信首页下拉即可快速访问']"
 			></u-notice-bar>
-			</u-alert-tips>
-			<!-- 导航 -->
-			<view class="navbar" :class="showNavFloat ? 'floatbar' : ''">
-				<view class="menu" v-if="category.length > 0">
-					<view class="category">
-						<scroll-view :scroll-x="true" :scroll-with-animation="true" :scroll-into-view="scroll_category_id" @scroll="navFloatShow()">
-							<view
-								class="item"
-								v-for="(item, index) in category"
-								:key="index"
-								:class="category_id == item.id ? 'current' : ''"
-								:id="'category_id-' + index"
-								:style="'width:' + (category.length <= 4 ? 100 / category.length + '%' : '')"
-								@tap="categoryChange(item.id, index)"
-							>
-								<view class="text">
-									<text>{{ item.name }}</text>
-									<!-- <image src="/static/images/bg_tab.png"></image> -->
-								</view>
-							</view>
-						</scroll-view>
-					</view>
-					<view class="list" @tap="menuShow(!showMenu)"><iconfont type="menu-01"></iconfont></view>
-				</view>
-			</view>
+			<!-- </u-alert-tips> -->
 		</view>
+		<!-- 列表 -->
 		<view class="content">
-			<view class="menu-block fade-in" v-show="showMenu">
-				<view class="list">
-					<text
-						class="item"
-						v-for="(item, index) in category"
-						:key="index"
-						:class="category_id == item.id ? 'current' : ''"
-						:id="'category_id-' + (index + 1)"
-						@tap="categoryChange(item.id, index)"
-					>
-						{{ item.name }}
+			<scroller @init="initScroller" @down="refreshData" @up="getData" :up="optUp" @scroll="navFloatShow(scroller)" :fixed="false">
+				<!-- 轮播图 -->
+				<view>
+					<swiper v-if="slider.length > 0" class="swiper" :indicator-dots="true" :autoplay="true" :circular="true">
+						<swiper-item v-for="(item, index) in slider" :key="index">
+							<navigator class="item" hover-class="none" :url="'/pages/article/detail?id=' + item.id">
+								<image :lazy-load="true" :src="item.photo_url" mode="aspectFill"></image>
+								<view class="title">
+									<text>{{ item.title }}</text>
+								</view>
+							</navigator>
+						</swiper-item>
+					</swiper>
+				</view>
+				<!-- 导航 -->
+				<view class="navbar" :class="showNavFloat ? 'floatbar' : ''">
+					<view class="menu" v-if="category.length > 0">
+						<view class="category">
+							<scroll-view :scroll-x="true" :scroll-with-animation="true" :scroll-into-view="scroll_category_id" @scroll="navFloatShow()">
+								<view
+									class="item"
+									v-for="(item, index) in category"
+									:key="index"
+									:class="category_id == item.id ? 'current' : ''"
+									:id="'category_id-' + index"
+									:style="'width:' + (category.length <= 4 ? 100 / category.length + '%' : '')"
+									@tap="categoryChange(item.id, index)"
+								>
+									<view class="text">
+										<text>{{ item.name }}</text>
+									</view>
+								</view>
+							</scroll-view>
+						</view>
+						<view class="list" @tap="menuShow(!showMenu)"><iconfont type="menu-01"></iconfont></view>
+					</view>
+				</view>
+				<!-- 导航子类别数据，展开菜单 -->
+				<view class="menu-block fade-in" v-show="showMenu">
+					<view class="list">
+						<text
+							class="item"
+							v-for="(item, index) in category"
+							:key="index"
+							:class="category_id == item.id ? 'current' : ''"
+							:id="'category_id-' + (index + 1)"
+							@tap="categoryChange(item.id, index)"
+						>
+							{{ item.name }}
 					</text>
 				</view>
-			</view>
-			<scroller @init="initScroller" @down="refreshData" @up="getData" :up="optUp" @scroll="navFloatShow(scroller)" :fixed="false">
-				<swiper v-if="slider.length > 0" class="swiper" :indicator-dots="true" :autoplay="true" :circular="true">
-					<swiper-item v-for="(item, index) in slider" :key="index">
-						<!-- 走马灯 -->
-						<navigator class="item" hover-class="none" :url="'/pages/article/detail?id=' + item.id">
-							<image :lazy-load="true" :src="item.photo_url" mode="aspectFill"></image>
-							<view class="title">
-								<text>{{ item.title }}</text>
-							</view>
-						</navigator>
-					</swiper-item>
-				</swiper>
+				</view>
+				<!-- 列表 -->
 				<articleList :list="list" />
 			</scroller>
 		</view>
-		<!-- <pageLoading v-if="showPageLoading"></pageLoading> -->
+		<pageLoading v-if="showPageLoading"></pageLoading>
 	</view>
 </template>
 
@@ -139,7 +131,7 @@ export default {
 		return {
 			path: '/pages/article/index',
 			success: function(e) {},
-			title: '开心品生活'
+			title: '报价平台'
 		};
 	},
 	onLoad(e) {
@@ -208,6 +200,39 @@ export default {
 
 		/*获取数据*/
 		getData() {
+			// this.$app.request({
+			// 	url: this.$api.article.index,
+			// 	data: {
+			// 		category_id: this.category_id,
+			// 		page_index: this.scroller.num,
+			// 		page_size: this.scroller.size
+			// 	},
+			// 	method: 'POST',
+			// 	dataType: 'json',
+			// 	success: res => {
+			// 		if (res.code == 0) {
+			// 			if (this.scroller.num == 1) {
+			// 				this.list = [];
+			// 			}
+			// 			if (this.slider.length == 0) {
+			// 				this.slider = res.data.slider;
+			// 			}
+			// 			this.list = this.list.concat(res.data.list);
+			// 			this.scroller.endByPage(res.data.list.length, res.data.page);
+			// 			this.showPageLoading = false;
+			// 		} else {
+			// 			this.scroller.endSuccess();
+			// 			this.$alert(res.msg);
+			// 		}
+			// 	},
+			// 	fail: res => {
+			// 		this.scroller.endErr();
+			// 	},
+			// 	complete: res => {
+			// 		uni.stopPullDownRefresh();
+			// 		uni.hideLoading();
+			// 	}
+			// });
 			this.$app.request({
 				url: this.$api.article.index,
 				data: {
@@ -311,22 +336,6 @@ page {
 /*头部*/
 .top {
 	/*页面标题*/
-	.page-title {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		height: 124rpx;
-		text-align: center;
-		border-bottom: 1rpx solid #efefef;
-		z-index: 9999;
-		line-height: 1;
-		image {
-			height: 50rpx;
-			width: 280rpx;
-			margin-left: -35rpx;
-		}
-	}
-
 	/*搜索*/
 	.search {
 		padding: 32rpx 200rpx 0 24rpx;
@@ -378,98 +387,96 @@ page {
 			}
 		}
 	}
-
-	/* 顶部navbar */
-	.navbar {
+}
+.navbar {
+	/*分类*/
+	.menu {
+		position: relative;
+		height: 80rpx;
+		white-space: nowrap;
+		padding: 15rpx 0 6rpx;
+		z-index: 10;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
 		/*分类*/
-		.menu {
-			position: relative;
-			height: 80rpx;
+		.category {
+			width: 650rpx;
+			margin-left: 30rpx;
 			white-space: nowrap;
-			padding: 15rpx 0 6rpx;
-			z-index: 10;
-			display: flex;
-			align-items: center;
-			justify-content: space-between;
-			/*分类*/
-			.category {
-				width: 650rpx;
-				margin-left: 30rpx;
-				white-space: nowrap;
-				position: relative;
-				scroll-view {
-					width: auto;
-					.item {
+			position: relative;
+			scroll-view {
+				width: auto;
+				.item {
+					position: relative;
+					display: inline-block;
+					margin: 0 31rpx 0;
+					height: 80rpx;
+					text-align: left;
+					padding-top: 7rpx;
+					//line-height: 80rpx;
+					&:first-child {
+						margin-left: 10rpx;
+					}
+					&:after {
+						content: '';
+						width: 0;
+						height: 0;
+						position: absolute;
+						left: 50%;
+						bottom: 0;
+						transform: translateX(-50%);
+						transition: 0.3s;
+					}
+					.text {
 						position: relative;
+						width: auto;
+						height: auto;
+						line-height: auto;
 						display: inline-block;
-						margin: 0 31rpx 0;
-						height: 80rpx;
-						text-align: left;
-						padding-top: 7rpx;
-						//line-height: 80rpx;
-						&:first-child {
-							margin-left: 10rpx;
+						text {
+							font-size: 36rpx;
+							font-weight: bold;
+							color: #555;
 						}
-						&:after {
-							content: '';
-							width: 0;
-							height: 0;
+						image {
 							position: absolute;
-							left: 50%;
-							bottom: 0;
-							transform: translateX(-50%);
-							transition: 0.3s;
-						}
-						.text {
-							position: relative;
-							width: auto;
-							height: auto;
-							line-height: auto;
-							display: inline-block;
-							text {
-								font-size: 36rpx;
-								font-weight: bold;
-								color: #555;
-							}
-							image {
-								position: absolute;
-								top: 16rpx;
-								right: -14rpx;
-								width: 50rpx;
-								height: 50rpx;
-								display: none;
-							}
+							top: 16rpx;
+							right: -14rpx;
+							width: 50rpx;
+							height: 50rpx;
+							display: none;
 						}
 					}
-					.current {
-						&:after {
-							width: 50%;
+				}
+				.current {
+					&:after {
+						width: 50%;
+					}
+					.text {
+						text {
+							font-size: 40rpx;
+							font-weight: bold;
+							color: #262626;
 						}
-						.text {
-							text {
-								font-size: 40rpx;
-								font-weight: bold;
-								color: #262626;
-							}
-							image {
-								display: block;
-							}
-							border-bottom: 6rpx solid #8cc7b5;
+						image {
+							display: block;
 						}
+						border-bottom: 6rpx solid #8cc7b5;
 					}
 				}
 			}
-			.list {
-				width: 70rpx;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				//box-shadow: -4rpx 0 0 #e9ebee;
-				//box-shadow: -2px 0 0 #262626;
-				/deep/ .icon {
-					font-size: 36rpx;
-					margin-top: -6rpx;
-				}
+		}
+		.list {
+			width: 70rpx;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			//box-shadow: -4rpx 0 0 #e9ebee;
+			//box-shadow: -2px 0 0 #262626;
+			/deep/ .icon {
+				font-size: 36rpx;
+				margin-top: -6rpx;
 			}
 		}
 	}

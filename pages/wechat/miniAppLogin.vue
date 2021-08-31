@@ -4,8 +4,18 @@
 			<view class="login">
 				<block v-if="canIUse">
 					<view class="photo"><image src="/static/images/default_user_photo.jpg" class="avatar"></image></view>
+					<view class="loginForm">
+						<u-form ref="loginForm" :model="loginForm">
+							<u-form-item label="账号" prop="account">
+								<u-input v-model="loginForm.account" placeholder="请输入账号" />
+							</u-form-item>
+							<u-form-item label="密码" prop="password">
+								<u-input v-model="loginForm.password" type="password" :password-icon="true" placeholder="请输入密码" />
+							</u-form-item>
+						</u-form>
+					</view>
 					<view class="auth">
-						<button class="button" type="primary" open-type="getUserInfo" @getuserinfo="bindGetuserInfo">微信登录</button>
+						<u-button shape="circle" type="primary" open-type="getUserInfo" @getuserinfo="bindGetuserInfo">微信登录</u-button>
 						<navigator v-if="!hasAuth" class="btn-cancel" url="/pages/index/index" open-type="switchTab">取消</navigator>
 					</view>
 				</block>
@@ -20,17 +30,39 @@ export default {
 	data() {
 		return {
 			hasAuth: true,
-			canIUse: true
+			canIUse: true,
+			rules: {
+				account: [
+					{
+						required: true,
+						message: '请输入账号',
+					},
+				],
+				password: [
+					{
+						required: true,
+						message: '请输入密码',
+					}
+				]
+			},
+			loginForm: {
+				account: '',
+				password: '',
+			}
 		};
+	},
+	onReady() {
+		this.$refs.loginForm.setRules(this.rules);
 	},
 	onLoad() {
 		this.canIUse = uni.canIUse('button.open-type.getUserInfo');
 		/*是否授权*/
 		uni.getSetting({
 			success: res => {
+				console.log(res)
 				/*已经授权直接登录*/
 				if (res.authSetting['scope.userInfo']) {
-					this.$app.wechatAppLogin(true); //登录
+					// this.$app.wechatAppLogin(true); //登录
 				} else {
 					this.hasAuth = false;
 				}
@@ -38,8 +70,20 @@ export default {
 		});
 	},
 	methods: {
+		submit() {
+			this.$refs.loginForm.validate(valid => {
+				console.log(valid)
+				// if (valid) {
+				// 	console.log('验证通过');
+				// } else {
+				// 	console.log('验证失败');
+				// }
+			});
+		},
 		bindGetuserInfo() {
-			this.$app.wechatAppLogin(true); //登录
+			this.submit()
+			console.log(this.loginForm)
+			this.$app.wechatAppLogin(true, this.loginForm); //登录
 		}
 	}
 };
@@ -54,6 +98,10 @@ export default {
 			width: 250rpx;
 			height: 250rpx;
 		}
+	}
+	.loginForm {
+		text-align: left;
+		padding: 78rpx;
 	}
 	.auth {
 		.btn-cancel {

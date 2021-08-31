@@ -10,31 +10,31 @@ const tabBarUrl = [
 ];
 
 const objectToUrlParams = function(obj) {
-	var str = "";
+	var str = '';
 	for (var key in obj) {
-		str += "&" + key + "=" + obj[key];
+		str += '&' + key + '=' + obj[key];
 	}
 	return str.substr(1);
-}
+};
 
 /**
  * 是否登录
  */
 const isLogin = function() {
-	if (uni.getStorageSync("isLogin") == "1") {
+	if (uni.getStorageSync('isLogin') == '1') {
 		return true;
 	}
 	return false;
-}
+};
 
 /**
  * 初始化登录
  */
 const initLogin = function() {
 	if (!isLogin()) {
-		login();
+		// login();
 	}
-}
+};
 
 /**
  * 登录
@@ -46,7 +46,7 @@ const login = function() {
 	uni.removeStorageSync('currentUser');
 	uni.removeStorageSync('platform');
 
-	console.log('跳转登录')
+	console.log('跳转登录');
 
 	/*储存当前页*/
 	let pages = getCurrentPages();
@@ -54,19 +54,19 @@ const login = function() {
 	let originUrl = '/' + currentPage.route;
 
 	// #ifdef H5
-	let urlParam = objectToUrlParams(currentPage.$route.query)
+	let urlParam = objectToUrlParams(currentPage.$route.query);
 	if (urlParam) {
 		originUrl = originUrl + '?' + urlParam;
 	}
 	// #endif
 
 	uni.setStorageSync('loginOriginUrl', originUrl); //存储跳转前URL
-	console.log('loginOriginUrl:' + originUrl)
+	console.log('loginOriginUrl:' + originUrl);
 
 	// #ifdef MP-WEIXIN
 	uni.navigateTo({
 		url: '/pages/wechat/miniAppLogin'
-	})
+	});
 	// #endif
 
 	// #ifndef MP-WEIXIN
@@ -75,10 +75,10 @@ const login = function() {
 	} else {
 		uni.navigateTo({
 			url: '/pages/common/login'
-		})
+		});
 	}
 	// #endif
-}
+};
 
 /*微信小程序登录初始化*/
 const wechatAppLoginInit = function() {
@@ -86,22 +86,22 @@ const wechatAppLoginInit = function() {
 	uni.getSetting({
 		success: function(res) {
 			/* 已经授权直接登录*/
-			if (res.authSetting['scope.userInfo']) {
-				wechatAppLogin(false); //登录
-			} else {
-				uni.navigateTo({
-					url: '/pages/wechat/miniAppLogin'
-				})
-			}
+			// if (res.authSetting['scope.userInfo']) {
+			// 	wechatAppLogin(false); //登录
+			// } else {
+			// 	uni.navigateTo({
+			// 		url: '/pages/wechat/miniAppLogin'
+			// 	})
+			// }
 		}
 	});
-}
+};
 
 /*微信小程序登录*/
-const wechatAppLogin = function(isBack = false) {
+const wechatAppLogin = function(isBack = false, userData) {
 	/*登录提示*/
 	uni.showLoading({
-		title: "正在登录",
+		title: '正在登录',
 		mask: true
 	});
 
@@ -110,65 +110,78 @@ const wechatAppLogin = function(isBack = false) {
 		provider: 'weixin',
 		success: loginResult => {
 			let code = loginResult.code;
-			console.log(loginResult);
 			/*获取用户信息*/
 			uni.getUserInfo({
 				success: result => {
 					/*获取分享id*/
-					let share_user_id = uni.getStorageSync('share_user_id');
-					share_user_id = share_user_id > 0 ? share_user_id : 0;
-
+					// let share_user_id = uni.getStorageSync('share_user_id');
+					// share_user_id = share_user_id > 0 ? share_user_id : 0;
 					/*登录验证*/
 					request({
-						url: api.wechat.miniAppLogin,
+						url: api.wechat.mpLogin,
 						data: {
-							share_user_id: share_user_id,
 							code: code,
-							user_info: result.rawData,
-							encrypted_data: result.encryptedData,
-							iv: result.iv,
-							signature: result.signature
 						},
 						method: 'POST',
 						dataType: 'json',
 						success: res => {
-							console.log(res)
-							if (res.code == 0) {
-								alert('登录成功', 'success');
-
-								/*更新登录状态,保存用户数据*/
-								let userInfo = res.data;
-								uni.setStorageSync("isLogin", '1');
-								uni.setStorageSync("accessToken", userInfo.token);
-								uni.setStorageSync('currentUser', userInfo);
-								uni.setStorageSync('platform', 'wechatMiniApp');
-								uni.setStorageSync('source', 'login');
-								if (userInfo.is_exist_user == 0) {
-									uni.setStorageSync('register', 1);
-								}
-
-								/*switchTab刷新*/
-								let originUrl = uni.getStorageSync('loginOriginUrl');
-								if (originUrl) {
-									let originUrlRoute = originUrl.split('?');
-									console.log('originUrlRoute:' + originUrlRoute)
-									if (tabBarUrl.includes(originUrlRoute[0])) {
-										uni.switchTab({
-											url: originUrlRoute[0]
-										})
+							console.log(res);
+							if (res.success) {
+								request({
+								url: api.wechat.miniAppLogin,
+								data: {
+									userCode: userData.account,
+									password: userData.password,
+									openid: res.data.openid
+								},
+								method: 'POST',
+								dataType: 'json',
+								success: res => {
+									console.log(res);
+									if (res.code == 0) {
+										alert('登录成功', 'success');
+										/*更新登录状态,保存用户数据*/
+										let userInfo = res.data;
+										uni.setStorageSync('isLogin', '1');
+										uni.setStorageSync('accessToken', userInfo.token);
+										uni.setStorageSync('currentUser', userInfo);
+										uni.setStorageSync('platform', 'wechatMiniApp');
+										uni.setStorageSync('source', 'login');
+										if (userInfo.is_exist_user == 0) {
+											uni.setStorageSync('register', 1);
+										}
+							
+										/*switchTab刷新*/
+										let originUrl = uni.getStorageSync('loginOriginUrl');
+										if (originUrl) {
+											let originUrlRoute = originUrl.split('?');
+											console.log('originUrlRoute:' + originUrlRoute);
+											if (tabBarUrl.includes(originUrlRoute[0])) {
+												uni.switchTab({
+													url: originUrlRoute[0]
+												});
+											} else {
+												uni.navigateBack();
+											}
+										} else {
+											/*登录后跳转*/
+											if (isBack) {
+												uni.navigateBack();
+											}
+										}
 									} else {
-										uni.navigateBack();
-									}
-								} else {
-									/*登录后跳转*/
-									if (isBack) {
-										uni.navigateBack();
+										alert(res.msg, 'warning');
 									}
 								}
+							});
 							} else {
-								alert(res.msg, 'warning');
+								uni.showToast({
+									title: '网络错误，请稍后重试',
+									icon: 'none',
+								});
+								uni.hideLoading();
 							}
-						}
+						},
 					});
 				},
 				fail: result => {
@@ -177,7 +190,7 @@ const wechatAppLogin = function(isBack = false) {
 			});
 		}
 	});
-}
+};
 
 /*微信公众号登录*/
 const initMPLogin = function() {
@@ -196,7 +209,7 @@ const initMPLogin = function() {
 
 	/*拼装url*/
 	location.href = api.wechat.mpLogin + '?url=' + encodeURIComponent(loginUrl) + '&share_user_id=' + share_user_id;
-}
+};
 
 /*检查是否有操作权限*/
 const checkAuth = function() {
@@ -206,33 +219,33 @@ const checkAuth = function() {
 		method: 'POST',
 		dataType: 'json',
 		success: res => {
-			console.log('has auth')
+			console.log('has auth');
 		}
 	});
-}
+};
 
 /*绑定手机号码*/
 const bindMobile = function() {
 	uni.navigateTo({
 		url: '/pages/user/bindMobile'
-	})
-}
+	});
+};
 
 /*获取来源url*/
 const getSourcePage = function() {
 	let pages = getCurrentPages();
-	console.log(pages)
+	console.log(pages);
 	if (pages.length >= 2) {
 		let currentPage = pages[pages.length - 2];
 		let originUrl = '/' + currentPage.route;
-		console.log('source:' + originUrl)
+		console.log('source:' + originUrl);
 		return originUrl;
 	} else {
-		console.log('source:' + 'no')
+		console.log('source:' + 'no');
 		return '';
 	}
 
-}
+};
 
 
 /**
@@ -240,7 +253,7 @@ const getSourcePage = function() {
  * @param {Object} req
  */
 const request = function(req) {
-	let accessToken = uni.getStorageSync("accessToken");
+	let accessToken = uni.getStorageSync('accessToken');
 	let platform = getPlatform();
 	let header = {
 		'platform': platform,
@@ -254,8 +267,8 @@ const request = function(req) {
 		url: req.url,
 		data: req.data || {},
 		header: header,
-		method: req.method || "GET",
-		dataType: req.dataType || "json",
+		method: req.method || 'GET',
+		dataType: req.dataType || 'json',
 		success: function(res) {
 			if (res.data.code == '1000') {
 				login(); //登录
@@ -263,7 +276,7 @@ const request = function(req) {
 				bindMobile(); //绑定手机号码
 			} else {
 				if (req.success) {
-					console.log(res)
+					console.log(res);
 					req.success(res.data);
 				}
 			}
@@ -295,11 +308,11 @@ const request = function(req) {
 			}
 		}
 	});
-}
+};
 
 /*上传文件*/
 const uploadFile = function(req) {
-	let accessToken = uni.getStorageSync("accessToken");
+	let accessToken = uni.getStorageSync('accessToken');
 	let platform = getPlatform();
 	let header = {
 		'platform': platform,
@@ -308,7 +321,7 @@ const uploadFile = function(req) {
 	if (req.header) {
 		header = Object.assign(header, req.header);
 	}
-	console.log(header)
+	console.log(header);
 	uni.uploadFile({
 		url: req.url,
 		filePath: req.filePath,
@@ -353,7 +366,7 @@ const uploadFile = function(req) {
 			}
 		}
 	});
-}
+};
 
 /*获取平台类型 */
 const getPlatform = function() {
@@ -378,7 +391,7 @@ const getPlatform = function() {
 	// #endif
 
 	return platform;
-}
+};
 
 /*无状态提示信息*/
 const alert = function(msg = '', icon = 'none', url = '', openType = 'navigate') {
@@ -398,13 +411,13 @@ const alert = function(msg = '', icon = 'none', url = '', openType = 'navigate')
 		if (icon == 'warning') {
 			uni.showToast({
 				title: msg,
-				image: "/static/images/icon-warning.png"
+				image: '/static/images/icon-warning.png'
 			});
 		} else {
 			uni.showToast({
 				title: msg,
 				icon: icon
-			})
+			});
 		}
 	}
 	if (url || openType == 'back') {
@@ -428,7 +441,7 @@ const alert = function(msg = '', icon = 'none', url = '', openType = 'navigate')
 					url: url
 				});
 			}
-		}, 1500)
+		}, 1500);
 	}
 };
 
@@ -441,7 +454,7 @@ const loading = function(msg = '', mask = true) {
 	uni.showLoading({
 		title: msg,
 		mask: mask
-	})
+	});
 };
 
 /*是否微信浏览器*/
@@ -465,7 +478,7 @@ const getNaviBarHeight = function() {
 	let height = '90rpx';
 	// #ifdef MP
 	let device = uni.getSystemInfoSync();
-	console.log(device)
+	console.log(device);
 	if (device.system.indexOf('iOS') > -1) {
 		if (device.model.indexOf('iPhone X') > -1) {
 			height = '44px;margin-top: 25px;padding-bottom: 5px;';
@@ -476,9 +489,9 @@ const getNaviBarHeight = function() {
 		height = '48px';
 	}
 	// #endif
-	console.log(height)
+	console.log(height);
 	return height;
-}
+};
 
 export default {
 	tabBarUrl,

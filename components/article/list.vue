@@ -3,24 +3,27 @@
 		<navigator :url="'/pages/article/detail?id=' + item.id" class="item" v-for="(item, index) in list" :key="index" hover-class="none">
 			<view class="info">
 				<view class="text">
-					<view class="title">{{ item.title }}</view>
+					<view class="title">{{ item.name }}</view>
 					<view class="other">
-						<view class="left">
-							<view class="source" v-if="item.source">{{ item.source }}</view>
-							<view class="time">{{ item.create_time }}</view>
-						</view>
-						<view class="right" v-if="item.comment_count > 0">
+						{{item.params}}
+						<!-- <view class="source" v-if="item.name">{{ item.name }}</view>
+						<view class="other-vertical">|</view>
+						<view class="time other-conter">{{ item.create_time }}</view>
+						<view class="other-vertical">|</view> -->
+						<!-- <view>{{ item.read }}</view> -->
+						<!-- <view class="right" v-if="item.comment_count > 0">
 							<image src="/static/images/icon_comment.png"></image>
 							<text>{{ item.comment_count }}</text>
-						</view>
-						<view class="right view" v-else>
-							<image src="/static/images/icon_view.png"></image>
-							<text>{{ item.read }}</text>
-						</view>
+						</view> -->
 					</view>
+					<view class="price">
+						<span>¥</span>
+						<span class="number">{{item.price}}</span>
+					</view>
+					<view>{{item.userName}}</view>
 				</view>
-				<view class="photo"><image :src="item.photo_url" mode="aspectFill"></image></view>
 			</view>
+			<!-- <view class="photo"><image :src="item.photo_url" mode="aspectFill"></image></view> -->
 			<view class="line"></view>
 		</navigator>
 	</view>
@@ -57,6 +60,12 @@ export default {
 				display: flex;
 				flex-direction: column;
 				margin-right: 40rpx;
+				.price {
+					color: #fe7070;
+					.number {
+						font-size: 36rpx;
+					}
+				}
 				.title {
 					flex-grow: 1;
 					flex-shrink: 1;
@@ -68,53 +77,58 @@ export default {
 					-webkit-line-clamp: 2;
 					-webkit-box-orient: vertical;
 					overflow: hidden;
-					height: 72rpx;
-					margin-bottom: 8rpx;
 				}
 				.other {
 					flex-grow: 1;
 					flex-shrink: 1;
 					display: flex;
 					align-items: center;
-					font-size: 28rpx;
+					font-size: 24rpx;
 					color: #999;
 					line-height: normal;
-					.left {
-						display: flex;
-						flex-grow: 1;
-						flex-shrink: 1;
-						.source {
-							display: -webkit-box;
-							text-overflow: ellipsis;
-							word-break: break-all;
-							-webkit-line-clamp: 1;
-							-webkit-box-orient: vertical;
-							overflow: hidden;
-							width: 140rpx;
-							margin-right: 16rpx;
-						}
+					margin: 12rpx 0;
+					.other-conter {
+						// border-left: 2rpx solid #ccc;
 					}
-					.right {
-						display: flex;
-						flex-direction: row;
-						justify-content: center;
-						align-items: center;
-						flex-grow: 0;
-						flex-shrink: 0;
-						margin-right: 5rpx;
-						image {
-							flex-grow: 1;
-							flex-shrink: 1;
-							width: 28rpx;
-							height: 28rpx;
-							margin-right: 12rpx;
-						}
-						text {
-							flex-grow: 1;
-							flex-shrink: 1;
-							margin-top: -6rpx;
-						}
+					.other-vertical {
+						color: #ccc;
 					}
+					// .left {
+					// 	display: flex;
+					// 	flex-grow: 1;
+					// 	flex-shrink: 1;
+					// 	.source {
+					// 		display: -webkit-box;
+					// 		text-overflow: ellipsis;
+					// 		word-break: break-all;
+					// 		-webkit-line-clamp: 1;
+					// 		-webkit-box-orient: vertical;
+					// 		overflow: hidden;
+					// 		width: 140rpx;
+					// 		margin-right: 16rpx;
+					// 	}
+					// }
+					// .right {
+					// 	display: flex;
+					// 	flex-direction: row;
+					// 	justify-content: center;
+					// 	align-items: center;
+					// 	flex-grow: 0;
+					// 	flex-shrink: 0;
+					// 	margin-right: 5rpx;
+					// 	image {
+					// 		flex-grow: 1;
+					// 		flex-shrink: 1;
+					// 		width: 28rpx;
+					// 		height: 28rpx;
+					// 		margin-right: 12rpx;
+					// 	}
+					// 	text {
+					// 		flex-grow: 1;
+					// 		flex-shrink: 1;
+					// 		margin-top: -6rpx;
+					// 	}
+					// }
 					.view {
 						image {
 							width: 40rpx;
@@ -124,12 +138,12 @@ export default {
 					}
 				}
 			}
-			.photo {
-				image {
-					height: 170rpx;
-					width: 222rpx;
-					border-radius: 10rpx;
-				}
+		}
+		.photo {
+			image {
+				height: 48rpx;
+				width: 48rpx;
+				border-radius: 50%;
 			}
 		}
 		.line {

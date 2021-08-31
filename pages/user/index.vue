@@ -92,12 +92,12 @@ export default {
 		return {
 			user: {},
 			loginText: '登录',
-			showPageLoading: true
+			showPageLoading: false
 		};
 	},
 	onShow() {
-		this.$initPageTitle(); //初始化页面标题
-		this.getUserInfo(); //获取用户信息
+		// this.$initPageTitle(); //初始化页面标题
+		// this.getUserInfo(); //获取用户信息
 
 		//登录
 		let source = uni.getStorageSync('source');

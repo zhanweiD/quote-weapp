@@ -62,7 +62,7 @@
 		{
 			"path": "pages/article/detail",
 			"style": {
-				"navigationBarTitleText": "文章详情",
+				"navigationBarTitleText": "商品详情",
 				"enablePullDownRefresh": true
 			}
 		},
@@ -185,8 +185,16 @@
 			"style": {
 				"navigationBarTitleText": "关于报价平台"
 			}
-		}
-	],
+		},
+		{
+			"path" : "pages/detail/detail",
+			"style" :                                                                                    
+			{
+				"navigationBarTitleText": "商品详情",
+				"enablePullDownRefresh": false
+				// "navigationStyle":"custom"
+			}
+		}],
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
 		"navigationBarTitleText": "报价平台",
@@ -194,7 +202,7 @@
 		"backgroundColor": "#F8F8F8"
 	},
 	"condition": { //模式配置，仅开发期间生效
-		"current": 2, //当前激活的模式（list 的索引项）
+		"current": 4, //当前激活的模式（list 的索引项）
 		"list": [{
 				"name": "搜索",
 				"path": "pages/article/search",
@@ -214,12 +222,12 @@
 				"pagePath": "pages/user/index",
 				"name": "我的",
 				"query": ""
+			},
+			{
+				"name": "详情",
+				"path": "pages/detail/detail",
+				"query": "id=2c9b6cd07b218807017b4922f25100b6&merchants=true"
 			}
-			// {
-			// 	"name": "详情",
-			// 	"path": "pages/article/detail",
-			// 	"query": "id=19"
-			// }
 		]
 	},
 	"tabBar": {

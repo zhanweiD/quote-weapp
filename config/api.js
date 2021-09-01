@@ -39,7 +39,8 @@ let api = {
 		// 新
 		getCate: apiRoot + 'app/categ/query',
 		getBrand: apiRoot + 'app/brand/query',
-		getData: apiRoot + 'app/product/query'
+		getData: apiRoot + 'app/product/query',
+		getDetail: apiRoot + 'app/product/info'
 	},
 	user: {
 		userLogin: apiRoot + 'user/login.html',

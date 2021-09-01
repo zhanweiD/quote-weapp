@@ -1,6 +1,6 @@
 <template>
-	<view class="list" v-if="list.length > 0">
-		<navigator :url="`/pages/detail/detail?id=${item.id}&merchants=${0}`" class="item" v-for="(item, index) in list" :key="index" hover-class="none">
+	<view class="list-home" v-if="list.length > 0">
+		<navigator :url="`/pages/components/detail/detail?id=${item.id}&merchants=${0}`" class="item" v-for="(item, index) in list" :key="index" hover-class="none">
 			<view class="info">
 				<view class="text">
 					<view class="title">{{ item.name }}</view>
@@ -14,15 +14,13 @@
 					<view>{{item.userName}}</view>
 				</view>
 			</view>
-			<!-- <view class="photo"><image :src="item.photo_url" mode="aspectFill"></image></view> -->
-			<view class="line"></view>
 		</navigator>
 	</view>
 </template>
 
 <script>
 export default {
-	name: 'articleList',
+	name: 'homeList',
 	props: {
 		list: {
 			type: Array,
@@ -36,10 +34,13 @@ export default {
 
 <style lang="scss">
 /*文章列表*/
-.list {
+.list-home {
 	margin-top: 2rpx;
 	.item {
-		padding: 40rpx 24rpx 0 24rpx;
+		background-color: #fff;
+		padding: 24rpx 36rpx;
+		border-radius: 36rpx;
+		margin-top: 12rpx;
 		.info {
 			display: flex;
 			flex-direction: row;
@@ -84,7 +85,7 @@ export default {
 					.other-vertical {
 						color: #ccc;
 					}
-				
+					
 					.view {
 						image {
 							width: 40rpx;
@@ -101,13 +102,6 @@ export default {
 				width: 48rpx;
 				border-radius: 50%;
 			}
-		}
-		.line {
-			display: bock;
-			width: 100%;
-			height: 1rpx;
-			margin-top: 22rpx;
-			background: #e8e8e8;
 		}
 		&:last-child {
 			.line {

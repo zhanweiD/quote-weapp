@@ -23,7 +23,7 @@
 			</view>
 			<view class="nav">
 				<view class="list">
-					<navigator class="item" url="/pages/user/favorite">
+					<navigator class="item" url="/pages/user/topUp">
 						<view class="info">
 							<view class="name">
 								<iconfont type="user-info"></iconfont>
@@ -32,7 +32,7 @@
 							<iconfont type="go"></iconfont>
 						</view>
 					</navigator>
-					<navigator class="item" url="/pages/list/index">
+					<navigator class="item" url="/pages/user/topUp">
 						<view class="info">
 							<view class="name">
 								<iconfont type="star-o"></iconfont>
@@ -52,7 +52,7 @@
 							<iconfont type="go"></iconfont>
 						</view>
 					</navigator>
-					<navigator class="item" url="/pages/common/about">
+					<navigator class="item" url="/pages/user/about">
 						<view class="info">
 							<view class="name">
 								<iconfont type="about"></iconfont>

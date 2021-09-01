@@ -52,7 +52,7 @@
 		
 		// 商品详情
 		{
-			"path" : "pages/detail/detail",
+			"path" : "pages/components/detail/detail",
 			"style" :                                                                                    
 			{
 				"navigationBarTitleText": "商品详情",
@@ -81,14 +81,14 @@
 		
 		// 登录
 		{
-			"path": "pages/wechat/miniAppLogin",
+			"path": "pages/components/wechat/miniAppLogin",
 			"style": {
 				"navigationBarTitleText": "登录"
 			}
 		},
 		// 充值
 		{
-			"path": "pages/user/favorite",
+			"path": "pages/user/topUp",
 			"style": {
 				"enablePullDownRefresh": false, // 不开启下拉刷新, 默认就是false
 				"disableScroll": true, // 禁止滚动, 解决scroll-view在Android小程序卡顿的问题
@@ -114,7 +114,7 @@
 		},
 		// 关于
 		{
-			"path": "pages/common/about",
+			"path": "pages/user/about",
 			"style": {
 				"navigationBarTitleText": "关于报价平台"
 			}

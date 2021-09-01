@@ -65,7 +65,7 @@
 
 <script>
 import scroller from '@/components/scroller/scroller.vue';
-import homeList from '@/components/article/listHome.vue';
+import homeList from '../components/proList/listHome.vue';
 import pageLoading from '@/components/loading/pageLoading.vue';
 
 export default {

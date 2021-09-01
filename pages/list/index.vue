@@ -57,7 +57,7 @@
 	import api from '@/config/api.js';
 	import pageLoading from '@/components/loading/pageLoading.vue';
 	import scroller from '@/components/scroller/scroller.vue';
-	import articleList from '@/components/article/list.vue';
+	import articleList from '../components/proList/list.vue';
 	
 	export default {
 		components: {

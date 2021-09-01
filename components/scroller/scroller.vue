@@ -110,6 +110,7 @@ export default {
 		up: Object, // 上拉加载的参数配置
 		top: [String, Number], // 下拉布局往下偏移的数值, 已默认单位为upx.
 		bottom: [String, Number], // 上拉布局往上偏移的数值, 已默认单位为upx.
+		// isUpLoading: Boolean,
 		fixed: {
 			// 是否通过fixed固定scroller的高度, 默认true
 			type: Boolean,

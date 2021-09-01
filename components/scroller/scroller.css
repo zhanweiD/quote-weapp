@@ -58,10 +58,11 @@ page {
 
 /* 上拉加载区域 */
 .scroller-upwarp {
-	min-height: 60rpx;
-	padding: 30rpx 0;
+	/* min-height: 60rpx; */
+	margin: 30rpx 0;
 	text-align: center;
 	clear: both;
+	background-color: #f8f8f8;
 }
 
 /* 下拉刷新,上拉加载--提示文本 */

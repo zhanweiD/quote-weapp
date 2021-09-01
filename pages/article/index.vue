@@ -4,7 +4,7 @@
 		<view class="top">
 			<!-- 页面标题 -->
 			<!-- 搜索 -->
-			<view class="search">
+			<view v-if="!showPageLoading" class="search">
 				<u-search :show-action="false" @search="searchContent()" placeholder="iphone 12" height="70"></u-search>
 			</view>
 			<u-notice-bar 
@@ -16,9 +16,8 @@
 				@close="barShow = false"
 				:list="['点击右上方添加到我的小程序,微信首页下拉即可快速访问']"
 			></u-notice-bar>
-			<!-- </u-alert-tips> -->
 		</view>
-		<!-- 列表 -->
+		
 		<view class="content">
 			<scroller @init="initScroller" @down="refreshData" @up="getData" :up="optUp" @scroll="navFloatShow(scroller)" :fixed="false">
 				<!-- 轮播图 -->
@@ -26,7 +25,7 @@
 					<swiper v-if="slider.length > 0" class="swiper" :indicator-dots="true" :autoplay="true" :circular="true">
 						<swiper-item v-for="(item, index) in slider" :key="index">
 							<navigator class="item" hover-class="none" :url="'/pages/article/detail?id=' + item.id">
-								<image :lazy-load="true" :src="item.photo_url" mode="aspectFill"></image>
+								<image :lazy-load="true" :src="'https://zhichait.com/' + item" mode="aspectFill"></image>
 								<view class="title">
 									<text>{{ item.title }}</text>
 								</view>
@@ -34,46 +33,30 @@
 						</swiper-item>
 					</swiper>
 				</view>
-				<!-- 导航 -->
-				<view class="navbar" :class="showNavFloat ? 'floatbar' : ''">
-					<view class="menu" v-if="category.length > 0">
-						<view class="category">
-							<scroll-view :scroll-x="true" :scroll-with-animation="true" :scroll-into-view="scroll_category_id" @scroll="navFloatShow()">
-								<view
-									class="item"
-									v-for="(item, index) in category"
-									:key="index"
-									:class="category_id == item.id ? 'current' : ''"
-									:id="'category_id-' + index"
-									:style="'width:' + (category.length <= 4 ? 100 / category.length + '%' : '')"
-									@tap="categoryChange(item.id, index)"
-								>
-									<view class="text">
-										<text>{{ item.name }}</text>
-									</view>
-								</view>
-							</scroll-view>
-						</view>
-						<view class="list" @tap="menuShow(!showMenu)"><iconfont type="menu-01"></iconfont></view>
+				<view class="navbar">
+					<view 
+						v-for="item in navList" 
+						:key="item.value" 
+						class="nav-item" 
+						:class="item.value === selectNavId ? 'selectNav' : ''"
+						@click="changeNav(item.value)"
+					>
+						{{item.name}}
 					</view>
 				</view>
-				<!-- 导航子类别数据，展开菜单 -->
-				<view class="menu-block fade-in" v-show="showMenu">
-					<view class="list">
-						<text
-							class="item"
-							v-for="(item, index) in category"
-							:key="index"
-							:class="category_id == item.id ? 'current' : ''"
-							:id="'category_id-' + (index + 1)"
-							@tap="categoryChange(item.id, index)"
-						>
-							{{ item.name }}
-					</text>
-				</view>
+				<view class="pro-cate">
+					<view
+						class="cate-item" 
+						v-for="item in cateList" 
+						:class="selectCateId === item.id ? 'select-item' : ''"
+						:key="item.id"
+						@click="selectCate(item.id)"
+					>
+						{{item.name}}
+					</view>
 				</view>
 				<!-- 列表 -->
-				<articleList :list="list" />
+				<view class="pro-list"><homeList :list="list" /></view>
 			</scroller>
 		</view>
 		<pageLoading v-if="showPageLoading"></pageLoading>
@@ -82,79 +65,79 @@
 
 <script>
 import scroller from '@/components/scroller/scroller.vue';
-import articleList from '@/components/article/list.vue';
+import homeList from '@/components/article/listHome.vue';
 import pageLoading from '@/components/loading/pageLoading.vue';
-import iconfont from '@/components/iconfont/iconfont.vue';
-import util from '@/common/util.js';
+
 export default {
 	components: {
-		articleList,
+		homeList,
 		pageLoading,
 		scroller,
-		iconfont
 	},
 	data() {
 		return {
 			scroller: {},
-			optUp: { auto: true, onScroll: true, page: { size: 20 }, empty: { tip: '暂无文章~' } },
+			optUp: { auto: true, onScroll: true, page: { size: 10 }, empty: { tip: '暂无内容~' } },
 			category_id: 1,
 			category_index: 0,
-			scroll_category_id: 'scroll_category_id_0',
 			currentSliderIndex: 0,
 			category: [],
-			showMenu: false,
 			slider: [],
 			list: [],
+			cateList: [],
+			navList: [
+				{name: '推荐', value: '0'},
+				{name: '新品', value: '1'},
+				{name: '二手', value: '2'},
+				{name: '批发', value: '3'},
+				{name: '图片', value: '4'},
+			],
+			selectNavId: '1',
 			showNoData: false,
 			showPageLoading: true,
-			showNavFloat: false,
 			navBarHeight: '',
-			barShow: true
+			barShow: true,
+			searchName: '',
+			selectCateId: '',
+			isUpLoading: true,
 		};
 	},
 	onShow() {
-		this.$initPageTitle(); //初始化页面标题
-
 		/*导航栏高度*/
 		if (this.navBarHeight == '') {
 			this.navBarHeight = this.$app.getNaviBarHeight();
 		}
-
-		/*来源是登录时更新*/
-		let source = uni.getStorageSync('source');
-		if (source == 'login') {
-			uni.removeStorageSync('source');
-			this.loadData();
-		}
 	},
-	onShareAppMessage() {
-		return {
-			path: '/pages/article/index',
-			success: function(e) {},
-			title: '报价平台'
-		};
-	},
+	
 	onLoad(e) {
-		// #ifdef H5
-		if (e.category_id > 0) {
-			this.category_id = e.category_id;
-		}
-		if (e.category_index > 0) {
-			this.category_index = e.category_index;
-		}
-		// #endif
 		this.getCategory();
+		this.getImg()
 	},
+	
 	onPullDownRefresh() {
-		uni.showLoading({
-			title: '刷新中'
-		});
+		// uni.showLoading({
+		// 	title: '刷新中'
+		// });
 		this.loadData();
 	},
 	methods: {
 		searchContent(v) {
-			console.log(v)
+			this.searchName = v
+			this.list = []
+			this.getData()
 		},
+		selectCate(id) {
+			this.selectCateId = id
+			this.list = []
+			this.getData()
+		},
+		// 切换一级分类
+		changeNav(type) {
+			this.selectNavId = type
+			this.list = []
+			this.getData()
+		},
+		
 		/*初始化滚动*/
 		initScroller(scroller) {
 			this.scroller = scroller;
@@ -162,9 +145,9 @@ export default {
 
 		/*刷新数据*/
 		refreshData() {
-			uni.showLoading({
-				title: '刷新中'
-			});
+			// uni.showLoading({
+			// 	title: '刷新中'
+			// });
 			this.scroller.resetUpScroll();
 		},
 
@@ -174,120 +157,6 @@ export default {
 			this.list = [];
 			this.currentSliderIndex = 0;
 			this.scroller.resetUpScroll();
-		},
-
-		/*获取子类别数据*/
-		getCategory() {
-			this.$app.request({
-				url: this.$api.article.category,
-				method: 'POST',
-				dataType: 'json',
-				success: res => {
-					if (res.code == 0) {
-						this.category = res.data;
-						if (this.category_index > -1) {
-							let nextIndex = this.category_index - 1;
-							nextIndex = nextIndex <= 0 ? 0 : nextIndex;
-							this.scroll_category_id = `category_id-${nextIndex}`; //动画滚动,滚动至中心位置
-						}
-					} else {
-						this.$alert(res.msg);
-					}
-				},
-				complete: res => {}
-			});
-		},
-
-		/*获取数据*/
-		getData() {
-			// this.$app.request({
-			// 	url: this.$api.article.index,
-			// 	data: {
-			// 		category_id: this.category_id,
-			// 		page_index: this.scroller.num,
-			// 		page_size: this.scroller.size
-			// 	},
-			// 	method: 'POST',
-			// 	dataType: 'json',
-			// 	success: res => {
-			// 		if (res.code == 0) {
-			// 			if (this.scroller.num == 1) {
-			// 				this.list = [];
-			// 			}
-			// 			if (this.slider.length == 0) {
-			// 				this.slider = res.data.slider;
-			// 			}
-			// 			this.list = this.list.concat(res.data.list);
-			// 			this.scroller.endByPage(res.data.list.length, res.data.page);
-			// 			this.showPageLoading = false;
-			// 		} else {
-			// 			this.scroller.endSuccess();
-			// 			this.$alert(res.msg);
-			// 		}
-			// 	},
-			// 	fail: res => {
-			// 		this.scroller.endErr();
-			// 	},
-			// 	complete: res => {
-			// 		uni.stopPullDownRefresh();
-			// 		uni.hideLoading();
-			// 	}
-			// });
-			this.$app.request({
-				url: this.$api.article.index,
-				data: {
-					category_id: this.category_id,
-					page_index: this.scroller.num,
-					page_size: this.scroller.size
-				},
-				method: 'POST',
-				dataType: 'json',
-				success: res => {
-					if (res.code == 0) {
-						if (this.scroller.num == 1) {
-							this.list = [];
-						}
-						if (this.slider.length == 0) {
-							this.slider = res.data.slider;
-						}
-						this.list = this.list.concat(res.data.list);
-						this.scroller.endByPage(res.data.list.length, res.data.page);
-						this.showPageLoading = false;
-					} else {
-						this.scroller.endSuccess();
-						this.$alert(res.msg);
-					}
-				},
-				fail: res => {
-					this.scroller.endErr();
-				},
-				complete: res => {
-					uni.stopPullDownRefresh();
-					uni.hideLoading();
-				}
-			});
-		},
-
-		/*切换导航*/
-		categoryChange(category_id, index) {
-			this.showMenu = false;
-			this.category_index = index;
-			this.category_id = category_id;
-			var nextIndex = index - 1;
-			nextIndex = nextIndex <= 0 ? 0 : nextIndex;
-			this.scroll_category_id = `category_id-${nextIndex}`; //动画滚动,滚动至中心位置
-			this.loadData();
-
-			// #ifdef H5
-			// uni.navigateTo({
-			// 	url: '/pages/article/list?category_id=' + this.category_id + '&category_index=' + this.category_index
-			// });
-			// #endif
-		},
-
-		/*广告切换*/
-		sliderChange: function(e) {
-			this.currentSliderIndex = e.detail.current;
 		},
 
 		/*滚动时导航栏浮动*/
@@ -304,14 +173,77 @@ export default {
 				}
 			}
 		},
-		/*菜单框展示*/
-		menuShow(value) {
-			this.showMenu = value;
+		/*获取子类别数据*/
+		getCategory() {
+			this.$app.request({
+				url: this.$api.article.category,
+				method: 'POST',
+				dataType: 'json',
+				success: res => {
+					const {success, data, message} = res
+					if (success && data.length) {
+						this.cateList = data
+					} else {
+						this.$alert(message);
+					}
+				},
+			});
 		},
-		/*隐藏导航浮动*/
-		navFloatHide() {
-			this.showNavFloat = false;
-		}
+		
+		/*获取轮播图*/
+		getImg() {
+			this.$app.request({
+				url: this.$api.article.getImg,
+				method: 'GET',
+				dataType: 'json',
+				success: res => {
+					if (res.code == 1) {
+						this.slider = res.data
+					} else {
+						this.$alert(res.msg);
+					}
+					this.showPageLoading = false
+				},
+				complete: res => {}
+			});
+		},
+
+		/*获取列表数据*/
+		getData() {
+			this.scroller.removeEmpty()
+			this.scroller.showUpScroll()
+			this.$app.request({
+				url: this.$api.article.getData,
+				data: {
+					page: this.scroller.num,
+					row: this.scroller.size,
+					type: this.selectNavId,
+					categId: this.selectCateId,
+					name: this.searchName,
+				},
+				method: 'GET',
+				dataType: 'json',
+				success: res => {
+					if (res.code == 1) {
+						if (this.scroller.num == 1) {
+							this.list = [];
+						}
+						this.list = this.list.concat(res.data);
+						this.scroller.endByPage(res.data.length, Math.ceil(res.count / this.scroller.size));
+					} else {
+						this.scroller.endSuccess();
+						this.$alert(res.msg);
+					}
+				},
+				fail: res => {
+					this.scroller.endErr();
+				},
+				complete: res => {
+					uni.stopPullDownRefresh();
+					uni.hideLoading();
+				}
+			});
+		},
 	}
 };
 </script>
@@ -388,134 +320,9 @@ page {
 		}
 	}
 }
-.navbar {
-	/*分类*/
-	.menu {
-		position: relative;
-		height: 80rpx;
-		white-space: nowrap;
-		padding: 15rpx 0 6rpx;
-		z-index: 10;
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		/*分类*/
-		.category {
-			width: 650rpx;
-			margin-left: 30rpx;
-			white-space: nowrap;
-			position: relative;
-			scroll-view {
-				width: auto;
-				.item {
-					position: relative;
-					display: inline-block;
-					margin: 0 31rpx 0;
-					height: 80rpx;
-					text-align: left;
-					padding-top: 7rpx;
-					//line-height: 80rpx;
-					&:first-child {
-						margin-left: 10rpx;
-					}
-					&:after {
-						content: '';
-						width: 0;
-						height: 0;
-						position: absolute;
-						left: 50%;
-						bottom: 0;
-						transform: translateX(-50%);
-						transition: 0.3s;
-					}
-					.text {
-						position: relative;
-						width: auto;
-						height: auto;
-						line-height: auto;
-						display: inline-block;
-						text {
-							font-size: 36rpx;
-							font-weight: bold;
-							color: #555;
-						}
-						image {
-							position: absolute;
-							top: 16rpx;
-							right: -14rpx;
-							width: 50rpx;
-							height: 50rpx;
-							display: none;
-						}
-					}
-				}
-				.current {
-					&:after {
-						width: 50%;
-					}
-					.text {
-						text {
-							font-size: 40rpx;
-							font-weight: bold;
-							color: #262626;
-						}
-						image {
-							display: block;
-						}
-						border-bottom: 6rpx solid #8cc7b5;
-					}
-				}
-			}
-		}
-		.list {
-			width: 70rpx;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			//box-shadow: -4rpx 0 0 #e9ebee;
-			//box-shadow: -2px 0 0 #262626;
-			/deep/ .icon {
-				font-size: 36rpx;
-				margin-top: -6rpx;
-			}
-		}
-	}
-}
-.menu-block {
-	position: absolute;
-	top: 0;
-	left: 0;
-	background: #fff;
-	border-bottom: 1rpx solid #f5f5f5;
-	padding: 20rpx 0 50rpx;
-	z-index: 100;
-	width: 100%;
-	//box-shadow: 0 15rpx 10rpx -15rpx #e9ebee;
-	.list {
-		padding-left: 10rpx;
-		text {
-			background: #f5f7fa;
-			border-radius: 8rpx;
-			font-size: 32rpx;
-			margin: 12rpx 20rpx;
-			display: inline-block;
-			height: 72rpx;
-			width: 144rpx;
-			line-height: 72rpx;
-			text-align: center;
-		}
-		.current {
-			color: #fff;
-			background: #8cc7b5;
-			//font-size: 32rpx;
-		}
-	}
-}
-
 .scroll {
 	height: 100%;
 }
-
 /*幻灯片广告 */
 .swiper {
 	height: 350rpx;
@@ -545,8 +352,6 @@ page {
 				margin: 7% 6%;
 				display: flex;
 				align-items: center;
-				//background-image: linear-gradient(to right, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3));
-				//background-image: linear-gradient(90deg,rgba(255, 181, 19,.8),rgba(255, 181, 19,.2));
 				color: #fff;
 				display: -webkit-box;
 				text-overflow: ellipsis;
@@ -564,11 +369,42 @@ page {
 	}
 }
 
-/*浮动navbar*/
-.floatbar {
-	//border-bottom: 1rpx solid #e8e8e8;
-	box-shadow: 0px 2px 2px -2px #e8e8e8;
-	padding-bottom: 12rpx;
+.pro-list {
+	margin-top: 36rpx;
+	padding: 0rpx 12rpx;
+	background-color: #f8f8f8;
+}
+.pro-cate {
+	display: flex;
+	overflow: auto;
+	margin: 0 32rpx;
+	color: #666666;
+	.cate-item {
+		background-color: #f6f6f8;
+		border-radius: 36rpx;
+		padding: 8rpx 16rpx;
+		margin-right: 16rpx;
+		white-space: nowrap;
+	}
+	.select-item {
+		color: #2f5aff;
+	}
+}
+.navbar {
+	display: flex;
+	margin-left: 16rpx;
+	color: #afafb2;
+	.nav-item {
+		width: 20%;
+		margin: 32rpx 0;
+		text-align: center;
+		height: 36rpx;
+		line-height: 36rpx;
+	}
+	.selectNav {
+		color: #2f5aff;
+		font-size: 36rpx;
+	}
 }
 
 /deep/ .no-data {

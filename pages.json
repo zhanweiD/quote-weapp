@@ -7,7 +7,6 @@
 	        // "^u-(.*)": "uview-ui/components/u-$1/u-$1.vue"
 	},
 	"pages": [
-		
 		{
 			"path": "pages/article/index",
 			"style": {
@@ -21,7 +20,19 @@
 				"navigationBarTitleText": "报价平台"
 			}
 		},
-		
+		{
+			"path": "pages/merchants/index",
+			"style": {
+				"titleNView": false,
+				"navigationStyle": "custom",
+				"enablePullDownRefresh": false, // 不开启下拉刷新, 默认就是false
+				"disableScroll": true, // 禁止滚动, 解决scroll-view在Android小程序卡顿的问题
+				"app-plus": {
+					"bounce": "none" // 取消iOS回弹,避免和下拉刷新冲突 (小程序无法取消, 点此查看H5端的取消方法... )
+				},
+				"navigationBarTitleText": "报价平台"
+			}
+		},
 		{
 			"path": "pages/list/index",
 			"style": {
@@ -124,12 +135,12 @@
 				"navigationBarTitleText": "意见建议"
 			}
 		},
-		{
-			"path": "pages/user/setting",
-			"style": {
-				"navigationBarTitleText": "用户设置"
-			}
-		},
+		// {
+		// 	"path": "pages/user/setting",
+		// 	"style": {
+		// 		"navigationBarTitleText": "用户设置"
+		// 	}
+		// },
 		{
 			"path": "pages/user/profile",
 			"style": {
@@ -158,28 +169,7 @@
 				"navigationBarTitleText": "微信登录"
 			}
 		},
-		{
-			"path": "pages/common/register",
-			"style": {
-				"navigationBarTitleText": "注册",
-				"app-plus": {
-					// "titleNView": false,
-					// "navigationStyle": "custom"
-				}
-			}
-		},
-		{
-			"path": "pages/common/protocol",
-			"style": {
-				"navigationBarTitleText": "用户协议和隐私政策"
-			}
-		},
-		{
-			"path": "pages/common/forget",
-			"style": {
-				"navigationBarTitleText": "忘记密码？请重置密码"
-			}
-		},
+		
 		{
 			"path": "pages/common/about",
 			"style": {
@@ -202,12 +192,8 @@
 		"backgroundColor": "#F8F8F8"
 	},
 	"condition": { //模式配置，仅开发期间生效
-		"current": 4, //当前激活的模式（list 的索引项）
-		"list": [{
-				"name": "搜索",
-				"path": "pages/article/search",
-				"query": ""
-			},
+		"current": 0, //当前激活的模式（list 的索引项）
+		"list": [
 			{
 				"name": "首页",
 				"path": "pages/article/index",
@@ -222,12 +208,12 @@
 				"pagePath": "pages/user/index",
 				"name": "我的",
 				"query": ""
-			},
-			{
-				"name": "详情",
-				"path": "pages/detail/detail",
-				"query": "id=2c9b6cd07b218807017b4922f25100b6&merchants=true"
 			}
+			// {
+			// 	"name": "详情",
+			// 	"path": "pages/detail/detail",
+			// 	"query": "id=2c9b6cd07b218807017b4922f25100b6&merchants=true"
+			// }
 		]
 	},
 	"tabBar": {
@@ -248,7 +234,7 @@
 				// "text": "首页"
 			},
 			{
-				"pagePath": "pages/user/favorites",
+				"pagePath": "pages/merchants/index",
 				"iconPath": "static/images/nav-3.png",
 				"selectedIconPath": "static/images/nav-7.png"
 				// "text": "供应商"

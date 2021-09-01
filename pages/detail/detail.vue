@@ -13,7 +13,7 @@
 			<view class="userName">{{data.userName}}</view>
 		</view>
 		<view class="bottom-btn">
-			<view class="offer">立即报价</view>
+			<view v-if="merchants === 1" class="offer">立即报价</view>
 			<view class="collection">加入收藏</view>
 		</view>
 		
@@ -29,6 +29,7 @@
 			pageLoading,
 		},
 		onLoad(e) {
+			console.log(e)
 			this.id = e.id
 			this.merchants = e.merchants
 		},

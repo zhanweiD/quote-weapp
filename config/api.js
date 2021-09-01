@@ -7,9 +7,10 @@ let api = {
 	},
 	article: {
 		// 新
-		index: apiRoot + 'app/ad/pic',
+		getImg: apiRoot + 'app/ad/pic',
+		category: apiRoot + 'app/categ/query',
+		getData: apiRoot + 'app/product/query',
 		
-		category: apiRoot + 'article/category.html',
 		detail: apiRoot + 'article/detail.html',
 		comment: apiRoot + 'article/comment.html',
 		commentDetail: apiRoot + 'article/commentDetail.html',

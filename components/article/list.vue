@@ -1,6 +1,6 @@
 <template>
 	<view class="list" v-if="list.length > 0">
-		<navigator :url="`/pages/detail/detail?id=${item.id}&merchants=${true}`" class="item" v-for="(item, index) in list" :key="index" hover-class="none">
+		<navigator :url="`/pages/detail/detail?id=${item.id}&merchants=${1}`" class="item" v-for="(item, index) in list" :key="index" hover-class="none">
 			<view class="info">
 				<view class="text">
 					<view class="title">{{ item.name }}</view>

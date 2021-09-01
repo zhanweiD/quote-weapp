@@ -237,7 +237,7 @@ export default {
 	/*小程序分享*/
 	onShareAppMessage() {
 		return {
-			path: '/pages/article/detail?id=' + this.info.id,
+			path: '/pages/detail/detail?id=' + this.info.id,
 			success: function(e) {},
 			title: this.info.title,
 			imageUrl: this.info.photo_url
@@ -527,7 +527,7 @@ export default {
 			// #ifdef H5
 			let domain = location.href.split('/pages/')[0];
 			/*分享链接*/
-			let link = domain + '/pages/article/detail?id=' + this.info.id;
+			let link = domain + '/pages/detail/detail?id=' + this.info.id;
 			if (this.$app.isWechat()) {
 				/*初始化分享*/
 				wechatMP.initShare(this, {

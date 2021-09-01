@@ -2,26 +2,15 @@
 	<view class="wrap">
 		<view class="status-bar"></view>
 		<view class="content">
-			<view class="user">
-				<view class="base-info">
-					<view class="user-info">
-						<view class="avatar" :class="[user.id > 0 && !user.avatar_url ? 'default-avatar' : '']">
-							<navigator v-if="user.avatar_url" url="profile" hover-class="none"><image :src="user.avatar_url"></image></navigator>
-							<image v-else src="/static/images/default_user_photo.jpg" @tap="login()"></image>
-						</view>
-						<navigator v-if="user.id > 0" class="info" hover-class="none" url="/pages/user/profile">
-							<view class="nickname">{{ user.nickname }}</view>
-							<!-- <view class="mobile" v-if="user.mobile">{{ user.mobile }}</view> -->
-						</navigator>
-						<view v-else class="info">
-							<view class="btn-login" @tap="login()">{{ loginText }}</view>
-						</view>
-						<view class="setting hidden" v-if="user.id > 0">
-							<navigator class="btn-setting" url="/pages/user/profile"><iconfont type="modify-pen"></iconfont></navigator>
-						</view>
-					</view>
+			<view class="user-info">
+				<view class="avatar" :class="[user.id > 0 && !user.avatar_url ? 'default-avatar' : '']">
+					<image src="/static/images/default_user_photo.jpg" @tap="login()"></image>
+				</view>
+				<view class="info">
+					<view class="btn-login" @tap="login()">{{ loginText }}</view>
 				</view>
 			</view>
+			
 			<view class="middle-info">
 				<view class="info-money">
 					<view>0.00</view>
@@ -43,7 +32,7 @@
 							<iconfont type="go"></iconfont>
 						</view>
 					</navigator>
-					<navigator class="item" url="/pages/user/profile">
+					<navigator class="item" url="/pages/list/index">
 						<view class="info">
 							<view class="name">
 								<iconfont type="star-o"></iconfont>
@@ -198,84 +187,79 @@ export default {
 		color: #ffffff;
 	}
 }
-.user {
-	.base-info {
-		//background-image: linear-gradient(top, #e4edec 20%, #e4edec 80%);
-		background: #3B7ED5;
-		height: 280rpx;
-	}
-	.user-info {
-		padding: 64rpx 32rpx;
-		display: flex;
-		align-item: center;
-		justify-content: space-between;
-		.avatar {
-			flex-grow: 0;
-			flex-shrink: 0;
-			line-height: 0;
+.user-info {
+	background: #3B7ED5;
+	height: 280rpx;
+	padding: 64rpx 32rpx;
+	display: flex;
+	align-item: center;
+	justify-content: space-between;
+	.avatar {
+		flex-grow: 0;
+		flex-shrink: 0;
+		line-height: 0;
+		border-radius: 50%;
+		image {
+			width: 144rpx;
+			height: 144rpx;
 			border-radius: 50%;
-			image {
-				width: 144rpx;
-				height: 144rpx;
-				border-radius: 50%;
-				border: 1rpx solid #fff;
-			}
+			border: 1rpx solid #fff;
 		}
-		.default-avatar {
-			margin-top: -12rpx;
+	}
+	.default-avatar {
+		margin-top: -12rpx;
+	}
+	.info {
+		flex-grow: 1;
+		flex-shrink: 1;
+		padding-left: 28rpx;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		.nickname {
+			font-size: 44rpx;
+			color: #ffffff;
+			margin-top: -14rpx;
 		}
-		.info {
-			flex-grow: 1;
-			flex-shrink: 1;
-			padding-left: 28rpx;
+		.mobile {
+			font-size: 34rpx;
+			color: #fff;
 			display: flex;
-			flex-direction: column;
-			justify-content: center;
-			.nickname {
-				font-size: 44rpx;
-				color: #ffffff;
-				margin-top: -14rpx;
-			}
-			.mobile {
-				font-size: 34rpx;
-				color: #fff;
-				display: flex;
-				align-items: center;
-				line-height: normal;
-				/deep/ .icon {
-					margin-left: 30rpx;
-					font-size: 28rpx;
-					display: block;
-				}
-			}
-			.user-type {
-				display: flex;
-				margin-top: 6rpx;
-				text {
-					font-size: 24rpx;
-					color: #fff;
-					background-color: #cd8202;
-					padding: 0 24rpx;
-					border-radius: 55px;
-				}
-			}
-			.btn-login {
-				font-size: 42rpx;
-				background: transparent;
-				color: #fff;
-				text-align: left;
-				width: 200rpx;
+			align-items: center;
+			line-height: normal;
+			/deep/ .icon {
+				margin-left: 30rpx;
+				font-size: 28rpx;
+				display: block;
 			}
 		}
-		.setting {
-			flex-grow: 0;
-			flex-shrink: 0;
-			.btn-setting {
-				margin-top: 10rpx;
-				/deep/ .icon {
-					color: #fff;
-					font-size: 48rpx;
-				}
+		.user-type {
+			display: flex;
+			margin-top: 6rpx;
+			text {
+				font-size: 24rpx;
+				color: #fff;
+				background-color: #cd8202;
+				padding: 0 24rpx;
+				border-radius: 55px;
+			}
+		}
+		.btn-login {
+			font-size: 42rpx;
+			background: transparent;
+			color: #fff;
+			text-align: left;
+			width: 200rpx;
+		}
+	}
+	.setting {
+		flex-grow: 0;
+		flex-shrink: 0;
+		.btn-setting {
+			margin-top: 10rpx;
+			/deep/ .icon {
+				color: #fff;
+				font-size: 48rpx;
 			}
 		}
 	}

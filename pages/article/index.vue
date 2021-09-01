@@ -24,7 +24,7 @@
 				<view>
 					<swiper v-if="slider.length > 0" class="swiper" :indicator-dots="true" :autoplay="true" :circular="true">
 						<swiper-item v-for="(item, index) in slider" :key="index">
-							<navigator class="item" hover-class="none" :url="'/pages/article/detail?id=' + item.id">
+							<navigator class="item" hover-class="none" :url="'/pages/detail/detail?id=' + item.id">
 								<image :lazy-load="true" :src="'https://zhichait.com/' + item" mode="aspectFill"></image>
 								<view class="title">
 									<text>{{ item.title }}</text>

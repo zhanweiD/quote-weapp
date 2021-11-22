@@ -40,44 +40,16 @@ const initLogin = function() {
  * 登录
  */
 const login = function() {
-	/*清除登录缓存*/
-	uni.removeStorageSync('isLogin');
-	uni.removeStorageSync('accessToken');
-	uni.removeStorageSync('currentUser');
-	uni.removeStorageSync('platform');
-
-	console.log('跳转登录');
-
 	/*储存当前页*/
 	let pages = getCurrentPages();
 	let currentPage = pages[pages.length - 1];
 	let originUrl = '/' + currentPage.route;
 
-	// #ifdef H5
-	let urlParam = objectToUrlParams(currentPage.$route.query);
-	if (urlParam) {
-		originUrl = originUrl + '?' + urlParam;
-	}
-	// #endif
-
 	uni.setStorageSync('loginOriginUrl', originUrl); //存储跳转前URL
-	console.log('loginOriginUrl:' + originUrl);
 
-	// #ifdef MP-WEIXIN
 	uni.navigateTo({
-		url: '/pages/wechat/miniAppLogin'
+		url: '/pages/components/wechat/miniAppLogin'
 	});
-	// #endif
-
-	// #ifndef MP-WEIXIN
-	if (getPlatform() == 'wechatMP') {
-		initMPLogin(); //公众号登录
-	} else {
-		uni.navigateTo({
-			url: '/pages/common/login'
-		});
-	}
-	// #endif
 };
 
 /*微信小程序登录初始化*/
@@ -116,7 +88,8 @@ const wechatAppLogin = function(isBack = false, userData) {
 					/*获取分享id*/
 					// let share_user_id = uni.getStorageSync('share_user_id');
 					// share_user_id = share_user_id > 0 ? share_user_id : 0;
-					/*登录验证*/
+					
+					// 获取openid
 					request({
 						url: api.wechat.mpLogin,
 						data: {
@@ -125,50 +98,28 @@ const wechatAppLogin = function(isBack = false, userData) {
 						method: 'POST',
 						dataType: 'json',
 						success: res => {
-							console.log(res);
 							if (res.success) {
+								// 登录绑定微信
 								request({
 								url: api.wechat.miniAppLogin,
 								data: {
 									userCode: userData.account,
 									password: userData.password,
-									openid: res.data.openid
+									openid: res.data.openid,
+									icon: result.userInfo.avatarUrl,
 								},
 								method: 'POST',
 								dataType: 'json',
 								success: res => {
-									console.log(res);
-									if (res.code == 0) {
+									if (res.success) {
 										alert('登录成功', 'success');
 										/*更新登录状态,保存用户数据*/
 										let userInfo = res.data;
-										uni.setStorageSync('isLogin', '1');
-										uni.setStorageSync('accessToken', userInfo.token);
-										uni.setStorageSync('currentUser', userInfo);
-										uni.setStorageSync('platform', 'wechatMiniApp');
-										uni.setStorageSync('source', 'login');
-										if (userInfo.is_exist_user == 0) {
-											uni.setStorageSync('register', 1);
-										}
-							
-										/*switchTab刷新*/
-										let originUrl = uni.getStorageSync('loginOriginUrl');
-										if (originUrl) {
-											let originUrlRoute = originUrl.split('?');
-											console.log('originUrlRoute:' + originUrlRoute);
-											if (tabBarUrl.includes(originUrlRoute[0])) {
-												uni.switchTab({
-													url: originUrlRoute[0]
-												});
-											} else {
-												uni.navigateBack();
-											}
-										} else {
-											/*登录后跳转*/
-											if (isBack) {
-												uni.navigateBack();
-											}
-										}
+										uni.setStorageSync('userInfo', userInfo);
+										// 	/*登录后跳转*/
+										uni.switchTab({
+										  url: '/pages/article/index'
+										});
 									} else {
 										alert(res.msg, 'warning');
 									}
@@ -190,25 +141,6 @@ const wechatAppLogin = function(isBack = false, userData) {
 			});
 		}
 	});
-};
-
-/*微信公众号登录*/
-const initMPLogin = function() {
-	/*获取登录验证url*/
-	let url = location.href.split('/pages/');
-	let loginUrl = '';
-	if (url.length > 1) {
-		loginUrl = url[0] + '/pages/wechat/mpLogin';
-	} else {
-		loginUrl = url[0] + 'pages/wechat/mpLogin';
-	}
-
-	/*获取分享id*/
-	let share_user_id = uni.getStorageSync('share_user_id');
-	share_user_id = share_user_id > 0 ? share_user_id : 0;
-
-	/*拼装url*/
-	location.href = api.wechat.mpLogin + '?url=' + encodeURIComponent(loginUrl) + '&share_user_id=' + share_user_id;
 };
 
 /*检查是否有操作权限*/
@@ -499,7 +431,6 @@ export default {
 	initLogin,
 	login,
 	wechatAppLogin,
-	initMPLogin,
 	request,
 	uploadFile,
 	alert,

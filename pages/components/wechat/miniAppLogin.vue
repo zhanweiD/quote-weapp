@@ -15,7 +15,7 @@
 						</u-form>
 					</view>
 					<view class="auth">
-						<u-button shape="circle" type="primary" open-type="getUserInfo" @getuserinfo="bindGetuserInfo">微信登录</u-button>
+						<u-button shape="circle" type="primary" open-type="getUserInfo" @getuserinfo="bindGetuserInfo">登录</u-button>
 						<navigator v-if="!hasAuth" class="btn-cancel" url="/pages/index/index" open-type="switchTab">取消</navigator>
 					</view>
 				</block>

@@ -3,11 +3,11 @@
 		<view class="status-bar"></view>
 		<view class="content">
 			<view class="user-info">
-				<view class="avatar" :class="[user.id > 0 && !user.avatar_url ? 'default-avatar' : '']">
+				<view class="avatar" :class="[user.userid > 0 && !user.icon ? 'default-avatar' : '']">
 					<image src="/static/images/default_user_photo.jpg" @tap="login()"></image>
 				</view>
 				<view class="info">
-					<view class="btn-login" @tap="login()">{{ loginText }}</view>
+					<view class="btn-login" @tap="login()">{{ user.realname || loginText }}</view>
 				</view>
 			</view>
 			
@@ -26,7 +26,8 @@
 					<navigator class="item" url="/pages/user/topUp">
 						<view class="info">
 							<view class="name">
-								<iconfont type="user-info"></iconfont>
+								<image class="info-icon" src="/static/images/icon1.png"></image>
+								<!-- <iconfont type="user-info"></iconfont> -->
 								<text>我的充值中心</text>
 							</view>
 							<iconfont type="go"></iconfont>
@@ -35,7 +36,8 @@
 					<navigator class="item" url="/pages/user/topUp">
 						<view class="info">
 							<view class="name">
-								<iconfont type="star-o"></iconfont>
+								<image class="info-icon" src="/static/images/icon2.png"></image>
+								<!-- <iconfont type="star-o"></iconfont> -->
 								<text>我的商品</text>
 							</view>
 							<iconfont type="go"></iconfont>
@@ -46,7 +48,8 @@
 					<navigator class="item" url="/pages/user/feedback">
 						<view class="info">
 							<view class="name">
-								<iconfont type="feedback"></iconfont>
+								<image class="info-icon" src="/static/images/icon3.png"></image>
+								<!-- <iconfont type="feedback"></iconfont> -->
 								<text>意见建议</text>
 							</view>
 							<iconfont type="go"></iconfont>
@@ -55,7 +58,8 @@
 					<navigator class="item" url="/pages/user/about">
 						<view class="info">
 							<view class="name">
-								<iconfont type="about"></iconfont>
+								<image class="info-icon" src="/static/images/icon4.png"></image>
+								<!-- <iconfont type="about"></iconfont> -->
 								<text>关于报价平台</text>
 							</view>
 							<iconfont type="go"></iconfont>
@@ -63,7 +67,11 @@
 					</navigator>
 				</view>
 			</view>
+			<text @click="certification">认证</text>
 			<view class="tab-bar"></view>
+		</view>
+		<view class="logout">
+			<u-button type="primary" @click="logout()">退出登录</u-button>
 		</view>
 		<pageLoading v-if="showPageLoading"></pageLoading>
 	</view>
@@ -81,50 +89,41 @@ export default {
 		return {
 			user: {},
 			loginText: '登录',
-			showPageLoading: false
+			showPageLoading: false, 
 		};
 	},
-	onShow() {
-		// this.$initPageTitle(); //初始化页面标题
-		// this.getUserInfo(); //获取用户信息
-
-		//登录
-		let source = uni.getStorageSync('source');
-		if (source == 'login' || source == 'storyEdit') {
-			uni.removeStorageSync('source');
-		}
+	mounted() {
+		uni.getStorage({
+			key: 'userInfo',
+			success: res => {
+				console.log(this)
+				this.user = res.data
+			}
+		})
 	},
-	onLoad(e) {},
-	onPullDownRefresh() {
-		uni.showLoading({
-			title: '刷新中'
-		});
-		this.getUserInfo(); //获取用户信息
-	},
+	
 	methods: {
-		/*获取用户信息*/
-		getUserInfo() {
+		certification() {
+			console.log(1)
 			this.$app.request({
-				url: this.$api.user.index,
-				data: {},
+				url: 'https://cloudauth.aliyuncs.com/DescribeVerifyToken',
+				data: {
+					Format: 'JSON',
+					Version: '2019-03-07',
+					AccessKeyId: 'LTAI5t6tHtTLkHg51s1KeF3K',
+					Signature: 'Mx9BZhJV5yCgpH9MGfF9J8BvqkNTi6',
+					SignatureMethod: 'HMAC-SHA1',
+					Timestamp: '2021-11-11T13:00:00Z',
+					SignatureVersion: '1.0',
+					SignatureNonce: Math.round(Math.random()*10000),
+				},
 				method: 'POST',
 				dataType: 'json',
 				success: res => {
 					console.log(res);
-					if (res.code == 0) {
-						this.showPageLoading = false;
-						this.user = res.data;
-					} else {
-						this.$alert(res.msg);
-					}
 				},
-				complete: res => {
-					uni.stopPullDownRefresh();
-					uni.hideLoading();
-				}
 			});
 		},
-
 		/*登录*/
 		login() {
 			this.$app.login();
@@ -134,37 +133,26 @@ export default {
 		logout() {
 			uni.showModal({
 				title: '提示',
-				content: '退出登录？',
+				content: '确定退出登录吗？',
 				confirmText: '是',
 				cancelText: '否',
 				success: result => {
-					if (result.confirm) {
-						this.$app.request({
-							url: this.$api.user.logout,
-							method: 'POST',
-							success: res => {
-								if (res.code == 0) {
-									uni.removeStorageSync('isLogin');
-									uni.removeStorageSync('accessToken');
-									uni.removeStorageSync('currentUser');
-									uni.removeStorageSync('platform');
-									// #ifdef H5
-									this.$alert('退出登录成功', 'success', '/pages/index/index');
-									// #endif
-									
-									// #ifndef H5
-									this.$alert('退出登录成功', 'success', '/pages/index/index', 'switchTab');
-									// #endif
-									
-								} else {
-									this.$alert(res.msg, 'warning');
-								}
-							},
-							complete: function() {
-								uni.hideLoading();
-							}
-						});
-					}
+					uni.clearStorage();
+					uni.switchTab({
+					  url: '/pages/user/index'
+					});
+					// if (result.confirm) {
+					// 	this.$app.request({
+					// 		url: this.$api.user.logout,
+					// 		method: 'POST',
+					// 		success: res => {
+					// 			console.log(res)
+					// 		},
+					// 		complete: function() {
+					// 			uni.hideLoading();
+					// 		}
+					// 	});
+					// }
 				}
 			});
 		}
@@ -186,6 +174,9 @@ export default {
 		font-weight: bold;
 		color: #ffffff;
 	}
+}
+.logout{
+	padding: 108rpx 48rpx;
 }
 .user-info {
 	background: #3B7ED5;
@@ -216,6 +207,10 @@ export default {
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
+		.info-icon {
+			width: 48rpx;
+			height: 48rpx;
+		}
 		.nickname {
 			font-size: 44rpx;
 			color: #ffffff;
@@ -245,11 +240,11 @@ export default {
 			}
 		}
 		.btn-login {
-			font-size: 42rpx;
+			font-size: 36rpx;
 			background: transparent;
 			color: #fff;
 			text-align: left;
-			width: 200rpx;
+			// width: 200rpx;
 		}
 	}
 	.setting {

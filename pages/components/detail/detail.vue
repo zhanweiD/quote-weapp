@@ -10,7 +10,15 @@
 				<span class="symbol">¥</span>
 				<span class="price">{{data.price}}</span>
 			</view>
-			<view class="userName">{{data.userName}}</view>
+			<view class="userInfo">
+				<image class="userIcon" :src="data.userIcon ? 'https://zhichait.com/skin/' + data.userIcon : '/static/images/personalHeader.png'"></image>
+				<view>
+					<span class="info-userName">{{data.userName}}</span>
+					<span>{{data.phone}}</span>
+				</view>
+				<image class="userIconAuth" src="/static/images/authentication.jpg"></image>
+				<view class="certification">实名认证</view>
+			</view>
 		</view>
 		<view class="bottom-btn">
 			<view v-if="merchants === '1'" class="offer">立即报价</view>
@@ -90,6 +98,30 @@
 	.detail-content {
 		margin: 30rpx;
 		color: #999;
+		.userInfo {
+			display: flex;
+			justify-content: flex-start;
+			align-items: center;
+			margin-top: 12rpx;
+			padding-top: 48rpx;
+			border-top: 1px solid #ededed;
+			.info-userName {
+				margin-right: 24rpx;
+			}
+			.certification {
+				color: #3b9bff;
+			}
+			.userIcon {
+				width: 64rpx;
+				height: 64rpx;
+				margin-right: 24rpx;
+			}
+			.userIconAuth {
+				width: 28rpx;
+				height: 32rpx;
+				margin: 0rpx 24rpx;
+			}
+		}
 		.pro-name {
 			color: #000;
 			font-size: 36rpx;

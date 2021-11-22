@@ -7,6 +7,23 @@
 	        // "^u-(.*)": "uview-ui/components/u-$1/u-$1.vue"
 	},
 	"pages": [
+		// 用户
+		{
+			"path": "pages/user/index",
+			"style": {
+				// #ifdef H5
+				//"titleNView": false,
+				"navigationBarBackgroundColor": "#FFFFFF",
+				"navigationBarTextStyle": "black",
+				"navigationBarTitleText": "用户中心",
+				// #endif
+				// #ifndef H5
+				"navigationStyle": "custom",
+				"navigationBarTitleText": "用户中心",
+				// #endif
+				"enablePullDownRefresh": true
+			}
+		},
 		// 首页
 		{
 			"path": "pages/article/index",
@@ -18,7 +35,7 @@
 				"app-plus": {
 					"bounce": "none" // 取消iOS回弹,避免和下拉刷新冲突 (小程序无法取消, 点此查看H5端的取消方法... )
 				},
-				"navigationBarTitleText": "报价平台"
+				"navigationBarTitleText": "首页"
 			}
 		},
 		// 供应商
@@ -32,7 +49,7 @@
 				"app-plus": {
 					"bounce": "none" // 取消iOS回弹,避免和下拉刷新冲突 (小程序无法取消, 点此查看H5端的取消方法... )
 				},
-				"navigationBarTitleText": "报价平台"
+				"navigationBarTitleText": "智查报价平台"
 			}
 		},
 		// 分类
@@ -46,7 +63,7 @@
 				"app-plus": {
 					"bounce": "none" // 取消iOS回弹,避免和下拉刷新冲突 (小程序无法取消, 点此查看H5端的取消方法... )
 				},
-				"navigationBarTitleText": "报价平台"
+				"navigationBarTitleText": "智查报价平台"
 			}
 		},
 		
@@ -61,29 +78,11 @@
 			}
 		},
 		
-		// 用户
-		{
-			"path": "pages/user/index",
-			"style": {
-				// #ifdef H5
-				//"titleNView": false,
-				"navigationBarBackgroundColor": "#FFFFFF",
-				"navigationBarTextStyle": "black",
-				"navigationBarTitleText": "用户中心",
-				// #endif
-				// #ifndef H5
-				"navigationStyle": "custom",
-				"navigationBarTitleText": "我的",
-				// #endif
-				"enablePullDownRefresh": true
-			}
-		},
-		
 		// 登录
 		{
 			"path": "pages/components/wechat/miniAppLogin",
 			"style": {
-				"navigationBarTitleText": "登录"
+				"navigationBarTitleText": "智查报价平台"
 			}
 		},
 		// 充值
@@ -121,7 +120,7 @@
 		}],
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
-		"navigationBarTitleText": "报价平台",
+		"navigationBarTitleText": "智查报价平台",
 		"navigationBarBackgroundColor": "#3B7ED5",
 		"backgroundColor": "#F8F8F8"
 	},

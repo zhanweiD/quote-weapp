@@ -59,7 +59,7 @@ page {
 /* 上拉加载区域 */
 .scroller-upwarp {
 	/* min-height: 60rpx; */
-	margin: 30rpx 0;
+	padding: 30rpx 0;
 	text-align: center;
 	clear: both;
 	background-color: #f8f8f8;

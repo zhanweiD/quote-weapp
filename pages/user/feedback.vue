@@ -3,7 +3,8 @@
 		<view class="content">
 			<view class="list">
 				<view class="item"><textarea maxlength="100" v-model="content" placeholder="请输入您的意见或建议…"></textarea></view>
-				<view class="button" hover-class="button-hover" @tap="save"><text>提 交</text></view>
+				<u-button shape="circle" type="primary" @tap="save">提 交</u-button>
+				<!-- <view class="button" hover-class="button-hover" @tap="save"><text>提 交</text></view> -->
 			</view>
 		</view>
 	</view>
@@ -65,19 +66,18 @@ export default {
 .list {
 	position: fixed;
 	width: 100%;
+	padding: 24rpx;
 
 	.item {
 		padding: 50upx 40upx 20rpx;
 		background: #fff;
+		margin-bottom: 48rpx;
+		border-radius: 24rpx;
 
 		textarea {
 			height: 350rpx;
 			font-size: 32rpx;
 		}
-	}
-
-	.button {
-		margin-top: 80rpx;
 	}
 }
 </style>

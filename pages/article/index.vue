@@ -34,7 +34,7 @@
 					</swiper>
 				</view>
 				<view class="navbar">
-					<view 
+					<view
 						v-for="item in navList" 
 						:key="item.value" 
 						class="nav-item" 
@@ -270,11 +270,11 @@ page {
 	/*页面标题*/
 	/*搜索*/
 	.search {
-		padding: 32rpx 200rpx 0 24rpx;
+		margin: 0rpx 200rpx 0rpx 24rpx;
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		height: 124rpx;
+		height: 80rpx;
 		z-index: 9999;
 		.logo {
 			height: 60rpx;
@@ -370,7 +370,6 @@ page {
 }
 
 .pro-list {
-	margin-top: 36rpx;
 	padding: 0rpx 12rpx;
 	background-color: #f8f8f8;
 }
@@ -378,6 +377,7 @@ page {
 	display: flex;
 	overflow: auto;
 	margin: 0 32rpx;
+	padding-bottom: 36rpx;
 	color: #666666;
 	.cate-item {
 		background-color: #f6f6f8;

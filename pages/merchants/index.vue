@@ -1,6 +1,6 @@
 <template>
 	<view class="page">
-		<!-- <view class="status-bar"></view> -->
+		<view class="status-bar"></view>
 		<view class="top">
 			<!-- 页面标题 -->
 			<!-- 搜索 -->
@@ -17,7 +17,7 @@
 				:list="['点击右上方添加到我的小程序,微信首页下拉即可快速访问']"
 			></u-notice-bar>
 		</view>
-		<view class="cate-content">
+		<view class="cate-content content">
 			<view class="content-left">
 				<view 
 					class="left-item" 
@@ -235,12 +235,15 @@ page {
 	overflow: hidden;
 	height: 100%;
 }
-.cate-content {
-	border-top: #f5f5f5 8rpx solid;
+.content {
+	flex: 1;
+	width: 100%;
+	height: 100rpx;
 	display: flex;
 	background-color: #f5f5f5;
-	height: 100%;
-	overflow: hidden;
+	border-top: #f5f5f5 8rpx solid;
+}
+.cate-content {
 	.content-left {
 		width: 200rpx;
 		text-align: center;
@@ -282,13 +285,12 @@ page {
 .top {
 	/*页面标题*/
 	/*搜索*/
-	margin-top: 50rpx;
 	.search {
-		padding: 32rpx 200rpx 0 24rpx;
+		margin: 0rpx 200rpx 0rpx 24rpx;
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		height: 124rpx;
+		height: 80rpx;
 		z-index: 9999;
 		.logo {
 			height: 60rpx;

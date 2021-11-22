@@ -59,7 +59,7 @@ let api = {
 	},
 	wechat: {
 		// 新
-		miniAppLogin: apiRoot + 'wx/login',
+		miniAppLogin: apiRoot + 'app/wx/login',
 		mpLogin: apiRoot + 'app/wx',
 		// devLogin: apiRoot + 'wechat/devLogin',
 		// mpConfig: apiRoot + 'wechat/mpConfig',

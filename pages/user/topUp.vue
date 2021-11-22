@@ -22,7 +22,7 @@
 			</view>
 		</view>
 		<view class="footer-btn">
-			<u-button shape="circle" type="primary">充值</u-button>
+			<u-button shape="circle" type="primary">充 值</u-button>
 		</view>
 	</view>
 </template>

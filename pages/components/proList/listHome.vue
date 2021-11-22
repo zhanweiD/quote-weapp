@@ -11,7 +11,12 @@
 						<span>¥</span>
 						<span class="number">{{item.price}}</span>
 					</view>
-					<view>{{item.userName}}</view>
+					<view class="userInfo">
+						<image class="userIcon" :src="item.userIcon ? 'https://zhichait.com/skin/' + item.userIcon : '/static/images/personalHeader.png'"></image>
+						<view>{{item.userName}}</view>
+						<!-- <image class="userIconAuth" src="/static/images/authentication.jpg"></image>
+						<view>实名认证</view> -->
+					</view>
 				</view>
 			</view>
 		</navigator>
@@ -35,7 +40,7 @@ export default {
 <style lang="scss">
 /*文章列表*/
 .list-home {
-	margin-top: 2rpx;
+	overflow: auto;
 	.item {
 		background-color: #fff;
 		padding: 24rpx 36rpx;
@@ -46,6 +51,20 @@ export default {
 			flex-direction: row;
 			justify-content: space-between;
 			padding-bottom: 4rpx;
+			.userInfo {
+				display: flex;
+				justify-content: flex-start;
+				align-items: center;
+				.userIcon {
+					width: 64rpx;
+					height: 64rpx;
+					margin-right: 24rpx;
+				}
+				.userIconAuth {
+					width: 28rpx;
+					height: 32rpx;
+				}
+			}
 			.text {
 				flex-grow: 1;
 				flex-shrink: 1;

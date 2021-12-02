@@ -21,7 +21,7 @@ const objectToUrlParams = function(obj) {
  * 是否登录
  */
 const isLogin = function() {
-	if (uni.getStorageSync('isLogin') == '1') {
+	if (uni.getStorageSync('userInfo')) {
 		return true;
 	}
 	return false;

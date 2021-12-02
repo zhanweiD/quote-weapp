@@ -5,6 +5,10 @@ let api = {
 		aboutUs: apiRoot + 'common/aboutUs.html',
 		verify: apiRoot + 'common/verify.html',
 	},
+	merchants: {
+		getMerchants: apiRoot + 'app/seller',
+		getGoods: apiRoot + 'app/seller',
+	},
 	article: {
 		// 新
 		getImg: apiRoot + 'app/ad/pic',

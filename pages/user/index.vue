@@ -103,27 +103,6 @@ export default {
 	},
 	
 	methods: {
-		certification() {
-			console.log(1)
-			this.$app.request({
-				url: 'https://cloudauth.aliyuncs.com/DescribeVerifyToken',
-				data: {
-					Format: 'JSON',
-					Version: '2019-03-07',
-					AccessKeyId: 'LTAI5t6tHtTLkHg51s1KeF3K',
-					Signature: 'Mx9BZhJV5yCgpH9MGfF9J8BvqkNTi6',
-					SignatureMethod: 'HMAC-SHA1',
-					Timestamp: '2021-11-11T13:00:00Z',
-					SignatureVersion: '1.0',
-					SignatureNonce: Math.round(Math.random()*10000),
-				},
-				method: 'POST',
-				dataType: 'json',
-				success: res => {
-					console.log(res);
-				},
-			});
-		},
 		/*登录*/
 		login() {
 			this.$app.login();

@@ -110,6 +110,12 @@ export default {
 	},
 	
 	onLoad(e) {
+		console.log(uni.getStorageSync('isLogin'))
+		if (this.$app.isLogin()) {
+			console.log(1)
+		} else {
+			console.log(2)
+		}
 		this.getCategory();
 		this.getImg()
 	},

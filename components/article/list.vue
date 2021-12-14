@@ -109,12 +109,6 @@ export default {
 			margin-top: 22rpx;
 			background: #e8e8e8;
 		}
-		&:last-child {
-			.line {
-				//display: none;
-			}
-			//padding-bottom: 30rpx;
-		}
 	}
 }
 </style>

@@ -103,6 +103,10 @@ export default {
 	},
 	
 	methods: {
+		// 认证
+		certification() {
+			console.log('认证')
+		},
 		/*登录*/
 		login() {
 			this.$app.login();

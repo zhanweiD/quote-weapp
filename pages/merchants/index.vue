@@ -4,9 +4,9 @@
 		<view class="top">
 			<!-- 页面标题 -->
 			<!-- 搜索 -->
-			<view v-if="!loading" class="search">
+			<!-- <view v-if="!loading" class="search">
 				<u-search :show-action="false" @search="searchContent()" placeholder="iphone 12" height="70"></u-search>
-			</view>
+			</view> -->
 			<u-notice-bar  
 				:show="barShow"
 				type="primary" 
@@ -18,38 +18,18 @@
 			></u-notice-bar>
 		</view>
 		<view class="cate-content content">
-			<view class="content-left">
-				<view 
-					class="left-item" 
-					v-for="item in cateList" 
-					:class="selectCateId === item.id ? 'select-item' : ''"
-					:key="item.id"
-					@click="selectCate(item.id)"
-				>
-					{{item.name}}
-				</view>
-			</view>
-			<view class="content-right">
-				<!-- <view>
-					<image :lazy-load="true" :src="selectBrandImg" mode="aspectFill"></image>
-				</view> -->
-				<view class="right-brand">
-					<view 
-						class="brand-item" 
-						v-for="item in brandList" 
-						:key="item.id" 
-						:class="selectBrandId === item.id ? 'select-brand' : ''"
-						@click="selectBrand(item)"
-					>
-						{{item.name}}
-					</view>
-				</view>
-				<scroller @init="initScroller" @down="refreshData" @up="getData" :up="optUp" @scroll="navFloatShow(scroller)" :fixed="false">
-					<articleList :list="productList" />
-				</scroller>
-			</view>
+			<scroller 
+				@init="initScroller" 
+				@down="refreshData" 
+				@up="getData" 
+				:up="optUp" 
+				@scroll="navFloatShow(scroller)" 
+				:fixed="false"
+			>
+				<articleList :list="productList" />
+			</scroller>
 		</view>
-		<pageLoading v-if="loading"></pageLoading>
+		<!-- <pageLoading v-if="loading"></pageLoading> -->
 	</view>
 </template>
 
@@ -69,88 +49,16 @@
 			return {
 				productList: [], // 商品列表
 				selectProductId: '', // 选中的商品列表
-				cateList: [], // 分类列表
-				brandList: [], // 品牌列表
-				selectCateId: '', // 选中的分类
-				selectBrandId: '', // 选中的品牌
-				// selectBrandImg: '', // 选中的品牌icon
 				loading: true,
 				searchName: '',
 				
 				scroller: {},
 				optUp: { auto: true, onScroll: true, page: { size: 10 }, empty: { tip: '暂无数据~' } },
-				category_index: 0,
 				showNavFloat: false,
 			}
 		},
-		mounted() {
-			this.getCate()
-		},
-		methods: {
-			searchContent(v) {
-				this.searchName = v
-				this.productList = []
-				this.getData()
-			},
-			selectCate(id) {
-				this.selectCateId = id
-				this.getBrand(id)
-				this.productList = []
-				this.selectBrandId = ''
-				this.getData()
-			},
-			selectBrand(item) {
-				this.selectBrandId = item.id
-				this.proLoading = true
-				this.productList = []
-				this.getData()
-				// this.selectBrandImg = item.icon
-			},
-			// 获取品牌列表
-			getBrand(id) {
-				this.$app.request({
-					url: api.list.getBrand,
-					method: 'GET',
-					dataType: 'json',
-					data: {
-						categId: id
-					},
-					success: res => {
-						const {data, success, message} = res
-						if (success && data.length) {
-							this.brandList = data
-							// this.selectBrand(data[0])
-						} else {
-							uni.showToast({
-								title: message,
-								icon: 'none',
-							});
-						}
-						this.loading = false
-					}
-				})
-			},
-			// 获取分类列表
-			getCate() {
-				this.$app.request({
-					url: api.list.getCate,
-					method: 'GET',
-					dataType: 'json',
-					success: res => {
-						const {data, success, message} = res
-						if (success && data.length) {
-							this.cateList = data
-							this.selectCate(data[0].id)
-						} else {
-							uni.showToast({
-								title: message,
-								icon: 'none',
-							});
-						}
-					}
-				})
-			},
 		
+		methods: {
 			/*初始化滚动*/
 			initScroller(scroller) {
 				this.scroller = scroller;
@@ -174,28 +82,24 @@
 				this.scroller.showUpScroll()
 				
 				this.$app.request({
-					url: this.$api.list.getData,
+					url: this.$api.merchants.getMerchants,
 					data: {
 						page: this.scroller.num,
 						row: this.scroller.size,
-						type: '1',
-						categId: this.selectCateId,
-						brandId: this.selectBrandId,
-						name: this.searchName,
 					},
 					method: 'GET',
 					dataType: 'json',
 					success: res => {
-						if (res.code == 1) {
-							if (this.scroller.num == 1) {
-								this.productList = [];
-							}
-							this.productList = this.productList.concat(res.data);
-							this.scroller.endByPage(res.data.length, Math.ceil(res.count / this.scroller.size));
-						} else {
-							this.scroller.endSuccess();
-							this.$alert(res.msg);
-						}
+						// if (res.code == 1) {
+						// 	if (this.scroller.num == 1) {
+						// 		this.productList = [];
+						// 	}
+						// 	this.productList = this.productList.concat(res.data);
+						// 	this.scroller.endByPage(res.data.length, Math.ceil(res.count / this.scroller.size));
+						// } else {
+						// 	this.scroller.endSuccess();
+						// 	this.$alert(res.msg);
+						// }
 					},
 					fail: res => {
 						this.scroller.endErr();

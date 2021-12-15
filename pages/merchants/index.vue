@@ -4,9 +4,9 @@
 		<view class="top">
 			<!-- 页面标题 -->
 			<!-- 搜索 -->
-			<!-- <view v-if="!loading" class="search">
+			<view class="search">
 				<u-search :show-action="false" @search="searchContent()" placeholder="iphone 12" height="70"></u-search>
-			</view> -->
+			</view>
 			<u-notice-bar  
 				:show="barShow"
 				type="primary" 
@@ -17,7 +17,7 @@
 				:list="['点击右上方添加到我的小程序,微信首页下拉即可快速访问']"
 			></u-notice-bar>
 		</view>
-		<view class="cate-content content">
+		<view class="content">
 			<scroller 
 				@init="initScroller" 
 				@down="refreshData" 
@@ -25,6 +25,7 @@
 				:up="optUp" 
 				@scroll="navFloatShow(scroller)" 
 				:fixed="false"
+				class="list-content"
 			>
 				<articleList :list="productList" />
 			</scroller>
@@ -37,7 +38,7 @@
 	import api from '@/config/api.js';
 	import pageLoading from '@/components/loading/pageLoading.vue';
 	import scroller from '@/components/scroller/scroller.vue';
-	import articleList from '@/components/article/list.vue';
+	import articleList from '../components/proList/listMerchants.vue';
 	
 	export default {
 		components: {
@@ -89,17 +90,31 @@
 					},
 					method: 'GET',
 					dataType: 'json',
-					success: res => {
-						// if (res.code == 1) {
-						// 	if (this.scroller.num == 1) {
-						// 		this.productList = [];
-						// 	}
-						// 	this.productList = this.productList.concat(res.data);
-						// 	this.scroller.endByPage(res.data.length, Math.ceil(res.count / this.scroller.size));
-						// } else {
-						// 	this.scroller.endSuccess();
-						// 	this.$alert(res.msg);
-						// }
+					success: res1 => {
+						const res = {
+							code: 1,
+							count: 7,
+							data: [{
+								name: '111',
+								phone: 18848895880,
+								dizhi: '菩提院',
+							}, {
+								name: '222',
+								phone: 18848895880,
+								dizhi: '菩提院',
+							}],
+							success: true
+						}
+						if (res.code == 1) {
+							if (this.scroller.num == 1) {
+								this.productList = [];
+							}
+							this.productList = this.productList.concat(res.data);
+							this.scroller.endByPage(res.data.length, Math.ceil(res.count / this.scroller.size));
+						} else {
+							this.scroller.endSuccess();
+							this.$alert(res.msg);
+						}
 					},
 					fail: res => {
 						this.scroller.endErr();
@@ -147,42 +162,8 @@ page {
 	background-color: #f5f5f5;
 	border-top: #f5f5f5 8rpx solid;
 }
-.cate-content {
-	.content-left {
-		width: 200rpx;
-		text-align: center;
-		box-sizing: border-box;
-		// color: #1660f5;
-		overflow: auto;
-		.left-item {
-			padding: 24rpx 16rpx;
-		}
-		.select-item {
-			background-color: #fff;
-			// color: #1660f5;
-		}
-	}
-	.content-right {
-		padding: 24rpx;
-		width: calc(100vw - 200rpx);
-		background-color: #fff;
-		flex: 1;
-		min-height: calc(100vh - 200rpx);
-		// overflow: auto;
-		.right-brand {
-			display: flex;
-			overflow: auto;
-			.brand-item {
-				margin-right: 24rpx;
-				white-space: nowrap;
-				color: #afafb2;
-			}
-			.select-brand {
-				font-weight: bold;
-				color: #2f5aff;
-			}
-		}
-	}
+.list-content {
+	width: 100%;
 }
 
 /*头部*/

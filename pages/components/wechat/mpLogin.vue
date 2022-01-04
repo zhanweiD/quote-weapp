@@ -21,7 +21,6 @@ export default {
 				uni.setStorageSync('source', 'login');
 				uni.setStorageSync('isRegister', 1);
 				uni.setStorageSync('check_register', 1);
-				this.$app.bindMobile();
 				return;
 			}
 
@@ -33,19 +32,7 @@ export default {
 				uni.navigateTo({
 					url: originUrl
 				});
-				// if (this.$app.tabBarUrl.includes(originUrlRoute[0])) {
-				// 	uni.switchTab({
-				// 		url: originUrl[0]
-				// 	});
-				// } else {
-				// 	uni.navigateTo({
-				// 		url: originUrl
-				// 	});
-				// }
 			} else {
-				// uni.switchTab({
-				// 	url: '/pages/user/index'
-				// });
 				uni.switchTab({
 					url: '/pages/user/index'
 				});

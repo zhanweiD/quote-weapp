@@ -69,15 +69,13 @@ export default {
 			}
 		});
 	},
+	onShow(){
+		uni.hideHomeButton()
+	},
 	methods: {
 		submit() {
 			this.$refs.loginForm.validate(valid => {
 				console.log(valid)
-				// if (valid) {
-				// 	console.log('验证通过');
-				// } else {
-				// 	console.log('验证失败');
-				// }
 			});
 		},
 		bindGetuserInfo() {

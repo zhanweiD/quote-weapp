@@ -22,7 +22,7 @@
 			</view>
 		</view>
 		<view class="footer-btn">
-			<u-button shape="circle" type="primary">充 值</u-button>
+			<u-button shape="circle" type="primary" @click="topUp">充 值</u-button>
 		</view>
 	</view>
 </template>
@@ -42,7 +42,7 @@ export default {
 			this.selectId = id
 		},
 		/*获取数据*/
-		getData() {
+		topUp() {
 			this.$app.request({
 				url: this.$api.article.favoriteList,
 				data: {

@@ -4,7 +4,7 @@
 		<view class="content">
 			<view class="user-info">
 				<view class="avatar" :class="[user.userid > 0 && !user.icon ? 'default-avatar' : '']">
-					<image src="/static/images/default_user_photo.jpg" @tap="login()"></image>
+					<image src="/static/images/default_user_photo.jpg"></image>
 				</view>
 				<view class="info">
 					<view class="btn-login" @tap="login()">{{ user.realname || loginText }}</view>
@@ -65,9 +65,19 @@
 							<iconfont type="go"></iconfont>
 						</view>
 					</navigator>
+					<view class="item" @click="certification">
+						<view class="info">
+							<view class="name">
+								<image class="info-icon" src="/static/images/icon4.png"></image>
+								<!-- <iconfont type="about"></iconfont> -->
+								<text>认证</text>
+							</view>
+							<iconfont type="go"></iconfont>
+						</view>
+					</view>
 				</view>
 			</view>
-			<text @click="certification">认证</text>
+			<!-- <text @click="certification">认证</text> -->
 			<view class="tab-bar"></view>
 		</view>
 		<view class="logout">
@@ -80,6 +90,8 @@
 <script>
 import iconfont from '@/components/iconfont/iconfont.vue';
 import pageLoading from '@/components/loading/pageLoading.vue';
+import api from '@/config/api.js';
+
 export default {
 	components: {
 		iconfont,
@@ -103,13 +115,15 @@ export default {
 	},
 	
 	methods: {
-		// 认证
-		certification() {
-			console.log('认证')
-		},
 		/*登录*/
 		login() {
-			this.$app.login();
+			uni.redirectTo({
+				url: '/pages/components/wechat/miniAppLogin'
+			});
+		},
+		
+		certification() {
+			console.log(111)
 		},
 
 		/*退出登录*/
@@ -124,18 +138,6 @@ export default {
 					uni.switchTab({
 					  url: '/pages/user/index'
 					});
-					// if (result.confirm) {
-					// 	this.$app.request({
-					// 		url: this.$api.user.logout,
-					// 		method: 'POST',
-					// 		success: res => {
-					// 			console.log(res)
-					// 		},
-					// 		complete: function() {
-					// 			uni.hideLoading();
-					// 		}
-					// 	});
-					// }
 				}
 			});
 		}

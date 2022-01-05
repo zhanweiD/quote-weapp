@@ -113,6 +113,18 @@ export default {
 			}
 		})
 	},
+	onLoad() {
+		uni.getStorage({
+			key: 'openId',
+			success: res => {
+				if (!res.data) {
+					uni.redirectTo({
+						url: '/pages/components/wechat/miniAppLogin'
+					});
+				}
+			}
+		})
+	},
 	
 	methods: {
 		/*登录*/

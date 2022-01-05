@@ -4,10 +4,10 @@
 			<view class="info">
 				<view class="text">
 					<!-- <view class="photo"><image :src="item.photo_url" mode="aspectFill"></image></view> -->
-					<view class="title">{{ item.name }}</view>
+					<view class="title">{{ item.userName }}</view>
 				</view>
 				<view class="mt8">{{item.phone}}</view>
-				<view class="mt8">{{item.dizhi}}</view>
+				<view class="mt8">{{item.address}}</view>
 			</view>
 		</navigator>
 	</view>

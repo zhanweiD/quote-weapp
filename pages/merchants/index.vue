@@ -90,21 +90,7 @@
 					},
 					method: 'GET',
 					dataType: 'json',
-					success: res1 => {
-						const res = {
-							code: 1,
-							count: 7,
-							data: [{
-								name: '111',
-								phone: 18848895880,
-								dizhi: '菩提院',
-							}, {
-								name: '222',
-								phone: 18848895880,
-								dizhi: '菩提院',
-							}],
-							success: true
-						}
+					success: res => {
 						if (res.code == 1) {
 							if (this.scroller.num == 1) {
 								this.productList = [];

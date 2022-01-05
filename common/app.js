@@ -35,8 +35,8 @@ const wechatAppLoginInit = function() {
 	});
 };
 
-const certification = () => {
-	console.log(111);
+const certification = (info) => {
+	console.log(222);
 };
 
 // 登录成功跳转
@@ -84,7 +84,7 @@ const wechatAppLogin = function(isBack = false, userData) {
 								// 绑定微信否
 								if (userId) {
 									if (certified) toHome(data);
-									else certification();
+									else certification(data);
 								}
 								else {
 									// 登录绑定微信
@@ -101,7 +101,7 @@ const wechatAppLogin = function(isBack = false, userData) {
 									success: res2 => {
 										if (res2.success) {
 											if (certified) toHome(res2.data);
-											else certification();
+											else certification(res2.data);
 										}
 										else alert(res.msg);
 									}

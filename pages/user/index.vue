@@ -129,9 +129,11 @@ export default {
 	methods: {
 		/*登录*/
 		login() {
-			uni.redirectTo({
-				url: '/pages/components/wechat/miniAppLogin'
-			});
+			if (!this.user.userId) {
+				uni.redirectTo({
+					url: '/pages/components/wechat/miniAppLogin'
+				});
+			}
 		},
 		
 		certification() {
@@ -145,11 +147,13 @@ export default {
 				content: '确定退出登录吗？',
 				confirmText: '是',
 				cancelText: '否',
-				success: result => {
-					uni.clearStorage();
-					uni.switchTab({
-					  url: '/pages/user/index'
-					});
+				success: res => {
+					if (res.confirm) {
+						uni.clearStorage();
+						uni.redirectTo({
+							url: '/pages/components/wechat/miniAppLogin'
+						});
+					}
 				}
 			});
 		}

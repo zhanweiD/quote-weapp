@@ -1,13 +1,11 @@
 <template>
 	<view class="page">
-		<view class="status-bar"></view>
+		<!-- <view class="status-bar"></view>
 		<view class="top">
-			<!-- 页面标题 -->
-			<!-- 搜索 -->
 			<view class="search">
 				<u-search :show-action="false" @search="searchContent()" placeholder="iphone 12" height="70"></u-search>
 			</view>
-		</view>
+		</view> -->
 		<view class="content">
 			<scroller 
 				@init="initScroller" 
@@ -18,7 +16,7 @@
 				:fixed="false"
 				class="list-content"
 			>
-				<articleList :list="productList" />
+				<productItem :list="productList" />
 			</scroller>
 		</view>
 		<!-- <pageLoading v-if="loading"></pageLoading> -->
@@ -29,13 +27,13 @@
 	import api from '@/config/api.js';
 	import pageLoading from '@/components/loading/pageLoading.vue';
 	import scroller from '@/components/scroller/scroller.vue';
-	import articleList from '../components/proList/listMerchants.vue';
+	import productItem from './productItem.vue';
 	
 	export default {
 		components: {
 			pageLoading,
 			scroller,
-			articleList,
+			productItem,
 		},
 		data() {
 			return {
@@ -43,18 +41,18 @@
 				selectProductId: '', // 选中的商品列表
 				loading: true,
 				searchName: '',
-				
+				id: '',
 				scroller: {},
 				optUp: { auto: true, onScroll: true, page: { size: 10 }, empty: { tip: '暂无数据~' } },
 				showNavFloat: false,
 			}
 		},
+		onLoad(e) {
+			console.log(e)
+			this.id = e.id
+		},
 		
 		methods: {
-			searchContent(v) {
-				this.searchName = v
-				this.getData()
-			},
 			/*初始化滚动*/
 			initScroller(scroller) {
 				this.scroller = scroller;
@@ -78,11 +76,12 @@
 				this.scroller.showUpScroll()
 				
 				this.$app.request({
-					url: this.$api.merchants.getMerchants,
+					url: this.$api.merchants.getProduct,
 					data: {
 						page: this.scroller.num,
 						row: this.scroller.size,
-						name: this.searchName,
+						// id: this.id
+						id: 1
 					},
 					method: 'GET',
 					dataType: 'json',
@@ -126,15 +125,15 @@
 </script>
 
 <style lang="scss">
+page {
+	height: 100%;
+}
 .page {
 	display: flex;
 	flex: 1;
 	flex-direction: column;
 	overflow: hidden;
 	height: 100%;
-	.status-bar, .top {
-		background-color: #3B7ED5;
-	}
 }
 .content {
 	flex: 1;

@@ -1,13 +1,19 @@
 <template>
 	<view class="page">
-		<view class="content" :class="selectId === 0 ? 'content-select' : ''" @click="selectTopUp(0)">
-			<view>充值一个月</view>
+		<view 
+			class="content" 
+			v-for="(item, index) in list"
+			:key="index" 
+			:class="selectId === item.code ? 'content-select' : ''" 
+			@click="selectTopUp(item)"
+		>
+			<view>{{ item.name }}</view>
 			<view>
-				<view class="present-price">¥100.00</view>
-				<view class="original-price">¥120.00</view>
+				<view class="present-price">{{ `¥${item.presentPrice}` }}</view>
+				<view class="original-price">{{ `¥${item.originalPrice}` }}</view>
 			</view>
 		</view>
-		<view class="content" :class="selectId === 1 ? 'content-select' : ''" @click="selectTopUp(1)"> 
+		<!-- <view class="content" :class="selectId === 1 ? 'content-select' : ''" @click="selectTopUp(1)"> 
 			<view>充值三个月</view>
 			<view>
 				<view class="present-price">¥540.00</view>
@@ -20,7 +26,7 @@
 				<view class="present-price">¥960.00</view>
 				<view class="original-price">¥980.00</view>
 			</view>
-		</view>
+		</view> -->
 		<view class="footer-btn">
 			<u-button shape="circle" type="primary" @click="topUp">充 值</u-button>
 		</view>
@@ -31,27 +37,69 @@
 export default {
 	data() {
 		return {
-			selectId: 0,
+			selectId: '',
+			list: [],
+			originalPrice: 0,
+			price: 0,
 		};
 	},
-	onShow() {
+	onLoad() {
+		this.topUpInfo()
 	},
 	methods: {
 		// 选中充值项
-		selectTopUp(id) {
-			this.selectId = id
+		selectTopUp(item) {
+			this.selectId = item.code
+			this.price = item.presentPrice
 		},
-		/*获取数据*/
 		topUp() {
 			this.$app.request({
-				url: this.$api.article.favoriteList,
+					url: this.$api.wechat.payorder,
+					data: {
+						dictCode: this.selectId,
+						price: this.price,
+					},
+					method: 'GET',
+					dataType: 'json',
+					success: res => {
+						if (res.code == 1) {
+							console.log(res)
+						}
+					},
+					fail: res => {
+					},
+				});
+		},
+		/*获取数据*/
+		topUpInfo() {
+			this.$app.request({
+				url: this.$api.wechat.payment,
 				data: {
 				},
-				method: 'POST',
+				method: 'GET',
 				dataType: 'json',
 				success: res => {
-					if (res.code == 0) {
-					} else {
+					if (res.code == 1) {
+						const newList = res.data
+						this.originalPrice = +res.data[0].des
+						newList.splice(0, 1)
+						this.list = newList.map((item, index) => {
+							switch (index){
+								case 0:
+									item.originalPrice = this.originalPrice * 1
+									item.presentPrice = this.originalPrice * 1 * item.des
+									break;
+								case 1:
+									item.originalPrice = this.originalPrice * 3
+									item.presentPrice = this.originalPrice * 3 * (item.des * 10) / 10
+									break;
+								default:
+									item.originalPrice = this.originalPrice * 12
+									item.presentPrice = this.originalPrice * 12 * (item.des * 10) / 10
+									break;
+							}
+							return item
+						})
 					}
 				},
 				fail: res => {

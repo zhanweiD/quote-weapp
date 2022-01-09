@@ -7,15 +7,6 @@
 			<view v-if="!loading" class="search">
 				<u-search :show-action="false" @search="searchContent()" placeholder="iphone 12" height="70"></u-search>
 			</view>
-			<u-notice-bar  
-				:show="barShow"
-				type="primary" 
-				mode="horizontal" 
-				:close-icon="true"
-				:speed="100"
-				@close="barShow = false"
-				:list="['点击右上方添加到我的小程序,微信首页下拉即可快速访问']"
-			></u-notice-bar>
 		</view>
 		<view class="cate-content content">
 			<view class="content-left">
@@ -234,6 +225,9 @@ page {
 	flex-direction: column;
 	overflow: hidden;
 	height: 100%;
+	.status-bar, .top {
+		background-color: #3B7ED5;
+	}
 }
 .content {
 	flex: 1;

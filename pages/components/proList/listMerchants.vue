@@ -1,6 +1,12 @@
 <template>
 	<view class="list" v-if="list.length > 0">
-		<navigator :url="`/pages/detail/detail?id=${item.id}&merchants=${0}`" class="item" v-for="(item, index) in list" :key="index" hover-class="none">
+		<navigator 
+			:url="`/pages/components/detail/listProduct?id=${item.id}`" 
+			class="item" 
+			v-for="(item, index) in list" 
+			:key="index" 
+			hover-class="none"
+		>
 			<view class="info">
 				<view class="text">
 					<!-- <view class="photo"><image :src="item.photo_url" mode="aspectFill"></image></view> -->
@@ -15,7 +21,6 @@
 
 <script>
 export default {
-	name: 'articleList',
 	props: {
 		list: {
 			type: Array,

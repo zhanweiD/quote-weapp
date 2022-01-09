@@ -7,7 +7,7 @@ let api = {
 	},
 	merchants: {
 		getMerchants: apiRoot + 'app/seller',
-		getGoods: apiRoot + 'app/seller/product',
+		getProduct: apiRoot + 'app/seller/product',
 	},
 	article: {
 		// 新
@@ -56,6 +56,8 @@ let api = {
 		// 新
 		miniAppLogin: apiRoot + 'app/wx/login',
 		mpLogin: apiRoot + 'app/wx',
+		payment: apiRoot + 'app/payment',
+		payorder: apiRoot + 'app/pay/order ',
 		
 		devLogin: apiRoot + 'wechat/devLogin',
 		mpConfig: apiRoot + 'wechat/mpConfig',

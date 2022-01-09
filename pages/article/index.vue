@@ -110,20 +110,21 @@ export default {
 	},
 	
 	onLoad(e) {
-		console.log(uni.getStorageSync('isLogin'))
-		if (this.$app.isLogin()) {
-			console.log(1)
-		} else {
-			console.log(2)
-		}
-		this.getCategory();
-		this.getImg()
+		uni.getStorage({
+			key: 'openId',
+			success: res => {
+				this.getCategory();
+				this.getImg()
+			},
+			fail: res => {
+				uni.redirectTo({
+					url: '/pages/components/wechat/miniAppLogin'
+				});
+			}
+		})
 	},
 	
 	onPullDownRefresh() {
-		// uni.showLoading({
-		// 	title: '刷新中'
-		// });
 		this.loadData();
 	},
 	methods: {
@@ -216,39 +217,44 @@ export default {
 
 		/*获取列表数据*/
 		getData() {
-			this.scroller.removeEmpty()
-			this.scroller.showUpScroll()
-			this.$app.request({
-				url: this.$api.article.getData,
-				data: {
-					page: this.scroller.num,
-					row: this.scroller.size,
-					type: this.selectNavId,
-					categId: this.selectCateId,
-					name: this.searchName,
-				},
-				method: 'GET',
-				dataType: 'json',
+			uni.getStorage({
+				key: 'openId',
 				success: res => {
-					if (res.code == 1) {
-						if (this.scroller.num == 1) {
-							this.list = [];
+					this.scroller.removeEmpty()
+					this.scroller.showUpScroll()
+					this.$app.request({
+						url: this.$api.article.getData,
+						data: {
+							page: this.scroller.num,
+							row: this.scroller.size,
+							type: this.selectNavId,
+							categId: this.selectCateId,
+							name: this.searchName,
+						},
+						method: 'GET',
+						dataType: 'json',
+						success: res => {
+							if (res.code == 1) {
+								if (this.scroller.num == 1) {
+									this.list = [];
+								}
+								this.list = this.list.concat(res.data);
+								this.scroller.endByPage(res.data.length, Math.ceil(res.count / this.scroller.size));
+							} else {
+								this.scroller.endSuccess();
+								this.$alert(res.msg);
+							}
+						},
+						fail: res => {
+							this.scroller.endErr();
+						},
+						complete: res => {
+							uni.stopPullDownRefresh();
+							uni.hideLoading();
 						}
-						this.list = this.list.concat(res.data);
-						this.scroller.endByPage(res.data.length, Math.ceil(res.count / this.scroller.size));
-					} else {
-						this.scroller.endSuccess();
-						this.$alert(res.msg);
-					}
-				},
-				fail: res => {
-					this.scroller.endErr();
-				},
-				complete: res => {
-					uni.stopPullDownRefresh();
-					uni.hideLoading();
+					});
 				}
-			});
+			})
 		},
 	}
 };
@@ -264,6 +270,9 @@ page {
 	flex-direction: column;
 	overflow: hidden;
 	height: 100%;
+	.status-bar, .top {
+		background-color: #3B7ED5;
+	}
 }
 .content {
 	flex: 1;

@@ -86,6 +86,9 @@ const wechatAppLogin = function(isBack = false, userData) {
 									if (certified) toHome(data);
 									else certification(data);
 								}
+								// if (userId) {
+								// 	toHome(data);
+								// }
 								else {
 									// 登录绑定微信
 									request({

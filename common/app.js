@@ -77,17 +77,22 @@ const wechatAppLogin = function(isBack = false, userData) {
 						method: 'POST',
 						dataType: 'json',
 						success: res1 => {
-							if (res1.success) {
-								const {data, data: {sessionId, openid, userId, certified}} = res1;
+							const {data, success, data: {sessionId, openid, certified, userInfo, payOverTime, payTime}} = res1;
+							if (success) {
 								uni.setStorageSync('accessToken',sessionId);
 								uni.setStorageSync('openId',openid);
+								const newData = {
+									...userInfo,
+									payOverTime,
+									payTime,
+								};
 								// 绑定微信否
-								if (userId) {
-									if (certified) toHome(data);
-									else certification(data);
+								if (userInfo) {
+									if (certified) toHome(newData);
+									else certification(newData);
 								}
-								// if (userId) {
-								// 	toHome(data);
+								// if (userInfo) {
+								// 	toHome(newData);
 								// }
 								else {
 									// 登录绑定微信
@@ -96,13 +101,14 @@ const wechatAppLogin = function(isBack = false, userData) {
 									data: {
 										userCode: userData.account,
 										password: userData.password,
-										openid: openid,
+										// openid: openid,
 										icon: result.userInfo.avatarUrl,
 									},
 									method: 'POST',
 									dataType: 'json',
 									success: res2 => {
 										if (res2.success) {
+											// toHome(res2.data);
 											if (certified) toHome(res2.data);
 											else certification(res2.data);
 										}
@@ -146,6 +152,7 @@ const request = function(req) {
 		url: req.url,
 		data: {
 			...req.data,
+			// openId: 'oQBOz4nFkQxAp-Oepc8Lq-T8r-NY',
 			openId,
 		},
 		header: header,

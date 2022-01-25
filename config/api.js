@@ -37,6 +37,8 @@ let api = {
 	user: {
 		getEidToken: apiRoot + 'app/etoken',
 		getResults: apiRoot + 'app/eid',
+		getFeedbackType: apiRoot + 'app/feedback/type',
+		saveFeedback: apiRoot + 'feedback/save',
 		
 		userLogin: apiRoot + 'user/login.html',
 		register: apiRoot + 'user/register.html',

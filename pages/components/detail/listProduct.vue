@@ -16,7 +16,7 @@
 				:fixed="false"
 				class="list-content"
 			>
-				<productItem :list="productList" />
+				<productItem :list="productList" :merchants="merchants" />
 			</scroller>
 		</view>
 		<!-- <pageLoading v-if="loading"></pageLoading> -->
@@ -42,6 +42,7 @@
 				loading: true,
 				searchName: '',
 				id: '',
+				merchants: '0',
 				scroller: {},
 				optUp: { auto: true, onScroll: true, page: { size: 10 }, empty: { tip: '暂无数据~' } },
 				showNavFloat: false,
@@ -50,6 +51,7 @@
 		onLoad(e) {
 			console.log(e)
 			this.id = e.id
+			this.merchants = e.merchants
 		},
 		
 		methods: {
@@ -80,8 +82,8 @@
 					data: {
 						page: this.scroller.num,
 						row: this.scroller.size,
-						// id: this.id
-						id: 1
+						id: this.id
+						// id: 1
 					},
 					method: 'GET',
 					dataType: 'json',

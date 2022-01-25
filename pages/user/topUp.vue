@@ -34,6 +34,8 @@
 </template>
 
 <script>
+import MD5 from '@/common/sdk/md5.js';
+
 export default {
 	data() {
 		return {
@@ -57,13 +59,36 @@ export default {
 					url: this.$api.wechat.payorder,
 					data: {
 						dictCode: this.selectId,
-						price: this.price,
+						// price: this.price,
+						price: 0.01,
 					},
 					method: 'GET',
 					dataType: 'json',
 					success: res => {
 						if (res.code == 1) {
 							console.log(res)
+							const stringA=`nonceStr=${Date.now()}&package=prepay_id=${res.data.prepay_id}&timeStamp=${Date.now()}&key=KoZIhvcNAQEBBQADggEPADCCAQoCggE5`
+							console.log(stringA)
+							console.log(MD5(stringA))
+							// app_id=wx08844cb78d30859a&mch_id=1614064413&
+							wx.requestPayment({
+								// "app_id": 'wx08844cb78d30859a',
+								// "mch_id": '1614064413',
+								"timeStamp": Date.now() + '',
+								"nonceStr": Date.now() + '',
+								"package": `prepay_id=${res.data.prepay_id}`,
+								"signType": "MD5",
+								"paySign": MD5(stringA).toUpperCase(),
+								"success":function(res){
+									console.log(res)
+								},
+								"fail":function(res){
+									console.log(res)
+								},
+								"complete":function(res){
+									console.log(res)
+								}
+							})
 						}
 					},
 					fail: res => {

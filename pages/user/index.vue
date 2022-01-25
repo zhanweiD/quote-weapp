@@ -13,11 +13,11 @@
 			
 			<view class="middle-info">
 				<view class="info-money">
-					<view>0.00</view>
-					<view>余额（元）</view>
+					<view>{{formatDateTime(user.payTime) || '-'}}</view>
+					<view>充值时间</view>
 				</view>
 				<view class="info-money">
-					<view>2020-12-12</view>
+					<view>{{formatDateTime(user.payOverTime) || '-'}}</view>
 					<view>会员到期时间</view>
 				</view>
 			</view>
@@ -27,13 +27,12 @@
 						<view class="info">
 							<view class="name">
 								<image class="info-icon" src="/static/images/icon1.png"></image>
-								<!-- <iconfont type="user-info"></iconfont> -->
 								<text>我的充值中心</text>
 							</view>
 							<iconfont type="go"></iconfont>
 						</view>
 					</navigator>
-					<navigator class="item" url="/pages/user/topUp">
+					<navigator class="item" :url="`/pages/components/detail/listProduct?id=${user.userid || user.id}&merchants=${1}`" >
 						<view class="info">
 							<view class="name">
 								<image class="info-icon" src="/static/images/icon2.png"></image>
@@ -65,19 +64,8 @@
 							<iconfont type="go"></iconfont>
 						</view>
 					</navigator>
-					<view class="item" @click="certification">
-						<view class="info">
-							<view class="name">
-								<image class="info-icon" src="/static/images/icon4.png"></image>
-								<!-- <iconfont type="about"></iconfont> -->
-								<text>认证</text>
-							</view>
-							<iconfont type="go"></iconfont>
-						</view>
-					</view>
 				</view>
 			</view>
-			<!-- <text @click="certification">认证</text> -->
 			<view class="tab-bar"></view>
 		</view>
 		<view class="logout">
@@ -127,6 +115,24 @@ export default {
 	},
 	
 	methods: {
+		formatDateTime(inputTime) { //时间戳 转 YY-mm-dd HH:ii:ss 
+			if(!inputTime) return ''
+			var date = new Date(inputTime);
+			var y = date.getFullYear();
+			var m = date.getMonth() + 1;
+			m = m < 10 ? ('0' + m) : m;
+			var d = date.getDate();
+			d = d < 10 ? ('0' + d) : d;
+			var h = date.getHours();
+			h = h < 10 ? ('0' + h) : h;
+			var minute = date.getMinutes();
+			var second = date.getSeconds();
+			minute = minute < 10 ? ('0' + minute) : minute;
+			second = second < 10 ? ('0' + second) : second;
+			// return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
+			return y + '-' + m + '-' + d;
+		},
+
 		/*登录*/
 		login() {
 			if (!this.user.userId) {
@@ -136,10 +142,6 @@ export default {
 			}
 		},
 		
-		certification() {
-			console.log(111)
-		},
-
 		/*退出登录*/
 		logout() {
 			uni.showModal({

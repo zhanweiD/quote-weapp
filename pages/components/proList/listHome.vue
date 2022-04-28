@@ -10,13 +10,14 @@
 					<view class="price">
 						<span>¥</span>
 						<span class="number">{{item.price}}</span>
+						<span class="userInfo">{{item.userName}}</span>
 					</view>
-					<view class="userInfo">
-						<image class="userIcon" :src="item.userIcon ? 'https://zhichait.com/skin/' + item.userIcon : '/static/images/personalHeader.png'"></image>
+					<!-- <view class="userInfo">
+						<image class="userIcon" :src="item.userIcon ? 'https://zhichait.com:9006/skin/' + item.userIcon : '/static/images/personalHeader.png'"></image>
 						<view>{{item.userName}}</view>
-						<!-- <image class="userIconAuth" src="/static/images/authentication.jpg"></image>
-						<view>实名认证</view> -->
-					</view>
+						<image class="userIconAuth" src="/static/images/authentication.jpg"></image>
+						<view>实名认证</view>
+					</view> -->
 				</view>
 			</view>
 		</navigator>
@@ -52,9 +53,9 @@ export default {
 			justify-content: space-between;
 			padding-bottom: 4rpx;
 			.userInfo {
-				display: flex;
-				justify-content: flex-start;
-				align-items: center;
+				color: #000;			
+				margin-left: 16rpx;
+
 				.userIcon {
 					width: 64rpx;
 					height: 64rpx;

@@ -18,13 +18,14 @@
 						<view class="price">
 							<span>¥</span>
 							<span class="number">{{item.price}}</span>
+							<view class="userInfo">{{item.userName}}</view>
 						</view>
-						<view class="userInfo">
-							<image class="userIcon" :src="item.userIcon ? 'https://zhichait.com/skin/' + item.userIcon : '/static/images/personalHeader.png'"></image>
+						<!-- <view class="userInfo">
+							<image class="userIcon" :src="item.userIcon ? 'https://zhichait.com:9006/skin/' + item.userIcon : '/static/images/personalHeader.png'"></image>
 							<view>{{item.userName}}</view>
-							<!-- <image class="userIconAuth" src="/static/images/authentication.jpg"></image>
-							<view>实名认证</view> -->
-						</view>
+							<image class="userIconAuth" src="/static/images/authentication.jpg"></image>
+							<view>实名认证</view>
+						</view> -->
 					</view>
 				</view>
 				<!-- <view class="photo"><image :src="item.photo_url" mode="aspectFill"></image></view> -->

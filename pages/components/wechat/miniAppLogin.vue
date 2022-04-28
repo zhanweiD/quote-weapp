@@ -76,13 +76,15 @@ export default {
 		submit() {
 			this.$refs.loginForm.validate(valid => {
 				console.log(valid)
+				return valid
 			});
 		},
 		bindGetuserInfo() {
+			// if (!this.submit()) return
 			this.submit()
 			console.log(this.loginForm)
 			this.$app.wechatAppLogin(true, this.loginForm); //登录
-		}
+		},
 	}
 };
 </script>

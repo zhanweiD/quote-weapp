@@ -7,6 +7,20 @@
 	        // "^u-(.*)": "uview-ui/components/u-$1/u-$1.vue"
 	},
 	"pages": [
+		// 首页
+		{
+			"path": "pages/article/index",
+			"style": {
+				"titleNView": false,
+				"navigationStyle": "custom",
+				"enablePullDownRefresh": false, // 不开启下拉刷新, 默认就是false
+				"disableScroll": true, // 禁止滚动, 解决scroll-view在Android小程序卡顿的问题
+				"app-plus": {
+					"bounce": "none" // 取消iOS回弹,避免和下拉刷新冲突 (小程序无法取消, 点此查看H5端的取消方法... )
+				},
+				"navigationBarTitleText": "首页"
+			}
+		},
 		// 用户
 		{
 			"path": "pages/user/index",
@@ -22,20 +36,6 @@
 				"navigationBarTitleText": "用户中心",
 				// #endif
 				"enablePullDownRefresh": true
-			}
-		},
-		// 首页
-		{
-			"path": "pages/article/index",
-			"style": {
-				"titleNView": false,
-				"navigationStyle": "custom",
-				"enablePullDownRefresh": false, // 不开启下拉刷新, 默认就是false
-				"disableScroll": true, // 禁止滚动, 解决scroll-view在Android小程序卡顿的问题
-				"app-plus": {
-					"bounce": "none" // 取消iOS回弹,避免和下拉刷新冲突 (小程序无法取消, 点此查看H5端的取消方法... )
-				},
-				"navigationBarTitleText": "首页"
 			}
 		},
 		// 供应商

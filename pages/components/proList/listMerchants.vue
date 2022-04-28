@@ -12,7 +12,7 @@
 					<!-- <view class="photo"><image :src="item.photo_url" mode="aspectFill"></image></view> -->
 					<view class="title">{{ item.userName }}</view>
 				</view>
-				<view class="mt8">{{item.phone}}</view>
+				<view class="mt8" @click="callPhone(item.phone)">{{item.phone}}</view>
 				<view class="mt8">{{item.address}}</view>
 			</view>
 		</navigator>
@@ -27,6 +27,17 @@ export default {
 			default: function(e) {
 				return [];
 			}
+		}
+	},
+	methods: {
+		callPhone(phone) {
+			wx.makePhoneCall({
+				phoneNumber: phone + '',
+				success() {
+				},
+				fail() {
+				}
+			})
 		}
 	}
 };

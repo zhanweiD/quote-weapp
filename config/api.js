@@ -1,5 +1,5 @@
 // let apiRoot = 'http://8.141.52.34:10011/';
-let apiRoot = 'https://zhichait.com/';
+let apiRoot = 'https://zhichait.com:9006/';
 let api = {
 	common: {
 		aboutUs: apiRoot + 'common/aboutUs.html',

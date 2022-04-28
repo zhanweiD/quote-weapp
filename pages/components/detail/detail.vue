@@ -11,19 +11,19 @@
 				<span class="price">{{data.price}}</span>
 			</view>
 			<view class="userInfo">
-				<image class="userIcon" :src="data.userIcon ? 'https://zhichait.com/skin/' + data.userIcon : '/static/images/personalHeader.png'"></image>
+				<!-- <image class="userIcon" :src="data.userIcon ? 'https://zhichait.com:9006/skin/' + data.userIcon : '/static/images/personalHeader.png'"></image> -->
 				<view>
 					<span class="info-userName">{{data.userName}}</span>
-					<span>{{data.phone}}</span>
+					<span @click="callPhone(data.phone)">{{data.phone}}</span>
 				</view>
 				<image class="userIconAuth" src="/static/images/authentication.jpg"></image>
 				<view class="certification">实名认证</view>
 			</view>
 		</view>
-		<view class="bottom-btn">
+		<!-- <view class="bottom-btn">
 			<view v-if="merchants === '1'" class="offer">立即报价</view>
 			<view class="collection">加入收藏</view>
-		</view>
+		</view> -->
 		
 		<pageLoading v-if="loading"></pageLoading>
 	</view>
@@ -37,7 +37,6 @@
 			pageLoading,
 		},
 		onLoad(e) {
-			console.log(e)
 			this.id = e.id
 			this.merchants = e.merchants
 		},
@@ -53,6 +52,15 @@
 			this.getDetail()
 		},
 		methods: {
+			callPhone(phone) {
+				wx.makePhoneCall({
+					phoneNumber: phone + '',
+					success() {
+					},
+					fail() {
+					}
+				})
+			},
 			getDetail() {
 				this.$app.request({
 					url: this.$api.list.getDetail,

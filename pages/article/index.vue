@@ -25,7 +25,7 @@
 					<swiper v-if="slider.length > 0" class="swiper" :indicator-dots="true" :autoplay="true" :circular="true">
 						<swiper-item v-for="(item, index) in slider" :key="index">
 							<navigator class="item" hover-class="none" :url="'/pages/detail/detail?id=' + item.id">
-								<image :lazy-load="true" :src="'https://zhichait.com/' + item" mode="aspectFill"></image>
+								<image :lazy-load="true" :src="'https://zhichait.com:9006/' + item" mode="aspectFill"></image>
 								<view class="title">
 									<text>{{ item.title }}</text>
 								</view>
@@ -111,7 +111,8 @@ export default {
 	
 	onLoad(e) {
 		uni.getStorage({
-			key: 'openId',
+			key: 'userInfo',
+			// key: 'openId',
 			success: res => {
 				this.getCategory();
 				this.getImg()
